@@ -370,4 +370,4 @@ FodyWeavers.xsd
 node_modules
 **/node_modules
 
-#/TMS/json/<jsonfilename>.json
+/TMS/json/tmsproject-e504e-firebase-adminsdk-b90fh-4c2403d3a2.json
