@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+**/bin
+
+# Ignore the Firebase admin SDK file
+# wwwroot/group1-expensetracker-firebase-adminsdk-yqaqz-edfc9561fc
+
 # User-specific files
 *.rsuser
 *.suo
@@ -75,7 +80,7 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
+**/obj
 *.iobj
 *.pch
 *.pdb
@@ -361,3 +366,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+node_modules
+**/node_modules
+
+#/TMS/json/<jsonfilename>.json
