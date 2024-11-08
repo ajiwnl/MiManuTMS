@@ -14,7 +14,6 @@ namespace TMS
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             // Set the environment variable for Firestore credentials
             string path = Path.Combine(Directory.GetCurrentDirectory(), "json", "tmsproject-e504e-firebase-adminsdk-b90fh-4c2403d3a2.json");
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
