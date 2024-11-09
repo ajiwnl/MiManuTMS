@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Google.Cloud.Firestore;
 using TMS.Models;
+using TMS.ViewModels;
 
 namespace TMS.Controllers.Accounts
 {
@@ -23,44 +24,42 @@ namespace TMS.Controllers.Accounts
             return View();
         }
 
-        public async Task<IActionResult> Register(Auth auth)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(auth);
+                return View(model);
             }
 
             try
             {
                 // Create the user with email and password
-                var authResult = await _firebaseauth.CreateUserWithEmailAndPasswordAsync(auth.EmailAdd, auth.Password);
+                var authResult = await _firebaseauth.CreateUserWithEmailAndPasswordAsync(model.EmailAdd, model.Password);
 
                 // Send email verification
                 await _firebaseauth.SendEmailVerificationAsync(authResult.FirebaseToken);
 
-                // Inform the user to check their email for verification
                 TempData["RegistrationMsg"] = "Registration successful! Please check your email to verify your account before logging in.";
-
-                return RedirectToAction("Login"); // Redirect to the login page
+                return RedirectToAction("Login");
             }
             catch (FirebaseAuthException ex)
             {
-                Console.WriteLine($"Firebase Exception: {ex.Message}");
+                _logger.LogError($"Firebase Exception: {ex.Message}");
 
-                // Handle specific Firebase exceptions, such as invalid password
                 if (ex.Message.Contains("INVALID_PASSWORD") || ex.Message.Contains("wrong-password"))
                 {
                     TempData["IncorrectPassword"] = "Incorrect password. Please try again!";
-                    return View(auth);
+                    return View(model);
                 }
                 else
                 {
                     TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
                 }
 
-                return View(auth);
+                return View(model);
             }
         }
+
 
         public IActionResult Login()
         {
