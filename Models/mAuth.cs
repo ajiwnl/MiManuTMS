@@ -2,7 +2,7 @@
 
 namespace TMS.Models
 {
-    public class Auth
+    public class mAuth
     {
         public string EmailAdd { get; set; }
         public string Password { get; set; }
