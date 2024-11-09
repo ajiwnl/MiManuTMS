@@ -46,10 +46,18 @@ namespace TMS.Controllers.Accounts
             {
                 _logger.LogError($"Firebase Exception: {ex.Message}");
 
-                if (ex.Message.Contains("INVALID_PASSWORD") || ex.Message.Contains("wrong-password"))
+                // Handle specific Firebase registration exceptions
+                if (ex.Message.Contains("EMAIL_EXISTS"))
                 {
-                    TempData["IncorrectPassword"] = "Incorrect password. Please try again!";
-                    return View(model);
+                    TempData["ErrorMessage"] = "This email is already registered. Please use a different email.";
+                }
+                else if (ex.Message.Contains("WEAK_PASSWORD"))
+                {
+                    TempData["ErrorMessage"] = "Your password is too weak. Please choose a stronger password.";
+                }
+                else if (ex.Message.Contains("INVALID_EMAIL"))
+                {
+                    TempData["ErrorMessage"] = "The email address you entered is invalid. Please check and try again.";
                 }
                 else
                 {
@@ -58,6 +66,7 @@ namespace TMS.Controllers.Accounts
 
                 return View(model);
             }
+ 
         }
 
 
