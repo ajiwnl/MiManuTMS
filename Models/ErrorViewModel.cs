@@ -1,4 +1,4 @@
-namespace TMS.Models
+﻿namespace TMS.Models
 {
     public class ErrorViewModel
     {
