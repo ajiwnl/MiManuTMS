@@ -71,7 +71,7 @@ namespace TMS.Controllers.Accounts
                 var user = authResult.User;
 
                 // Step 2: Sign out to refresh user session
-                        _firebaseauth.SignOut();  // Sign out to clear cache
+                        //_firebaseauth.SignOut();  // Sign out to clear cache
 
                 // Step 3: Re-authenticate the user to get the updated email verification status
                 var reAuthResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.EmailAdd, model.Password);
