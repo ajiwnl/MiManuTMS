@@ -1,0 +1,40 @@
+/*Font Settings*/
+@font-face {
+    font-family: 'Poppins-Regular';
+    src: url('/fonts/poppins/Poppins-Regular.tff') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins-Bold';
+    src: url('/fonts/poppins/Poppins-Bold.tff') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.poppins-normal {
+    font-family: 'Poppins-Regular', sans-serif;
+}
+
+.poppins-bold {
+    font-family: 'Poppins-Bold', sans-serif;
+}
+
+
+/*Custom Shadow Pure CSS*/
+body {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.shadow-x {
+    box-shadow: -4px -1px 5px 0px rgba(0,0,0,0.25);
+    -webkit-box-shadow: -4px -1px 5px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: -4px -1px 5px 0px rgba(0,0,0,0.25);
+}
+
+.inner-shadow {
+    box-shadow: inset 0px 1px 10px rgba(0, 0, 0, 0.2);
+}
