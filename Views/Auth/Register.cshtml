@@ -18,7 +18,7 @@
     </div>
 
     @*
-    The Splash Design (Left)
+    The Register Design (Right)
     *@
     <div class="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
         <img class="h-48 w-48" src="~/res/book.png" />
@@ -57,7 +57,7 @@
             <div class="flex h-auto w-full items-center justify-center">
                 <button class="h-12 w-64 rounded-xl bg-[#DC3A3A] text-white duration-300 hover:bg-[#BC3232]" type="submit">Register</button>
             </div>
-            <label class="flex h-auto w-full items-center justify-center gap-1 text-xs">Already Have an Account? <a><span class="font-semibold text-[#DC3A3A] underline"> Login Here!</span></a></label>
+            <label class="flex h-auto w-full items-center justify-center gap-1 text-xs">Already Have an Account? <a asp-area="" asp-controller="Auth" asp-action="Login"><span class="font-semibold text-[#DC3A3A] underline"> Login Here!</span></a></label>
         </form>
     </div>
 </div>
