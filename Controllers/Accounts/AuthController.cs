@@ -66,38 +66,32 @@ namespace TMS.Controllers.Accounts
 
             try
             {
-                // Step 1: Sign in with email and password
+                // Attempt to sign in with email and password
                 var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.EmailAdd, model.Password);
-                var user = authResult.User;
 
-                // Step 2: Sign out to refresh user session
-                        _firebaseauth.SignOut();  // Sign out to clear cache
+                // Retrieve user's info to check if email is verified
+                var user = await _firebaseauth.GetUserAsync(authResult.FirebaseToken);
 
-                // Step 3: Re-authenticate the user to get the updated email verification status
-                var reAuthResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.EmailAdd, model.Password);
-                user = reAuthResult.User;
-
-                // Step 4: Check if the email is verified
                 if (!user.IsEmailVerified)
                 {
                     TempData["ErrorMsg"] = "Please verify your email before logging in.";
-                    return View(model);
+                    return View(model); // Prevent login if email is not verified
                 }
 
-                // Step 5: Store the user ID in session after successful login
-                HttpContext.Session.SetString("FirebaseUserId", user.LocalId);
+                // Email is verified, proceed with login
+                // Save user details in session or proceed as per your application needs
                 TempData["SuccessMsg"] = "Login successful!";
-                return RedirectToAction("ProfileSetup");  // Redirect to a profile setup page or dashboard
+                return RedirectToAction("ProfileSetup");
             }
             catch (FirebaseAuthException ex)
             {
                 _logger.LogError($"Firebase Exception: {ex.Message}");
 
-                if (ex.Message.Contains("INVALID_EMAIL"))
+                if (ex.Message.Contains("INVALID_EMAIL") || ex.Message.Contains("EMAIL_NOT_FOUND"))
                 {
-                    TempData["ErrorMsg"] = "Invalid email address. Please check the email entered.";
+                    TempData["ErrorMsg"] = "Email not found. Please check your email address.";
                 }
-                else if (ex.Message.Contains("WRONG_PASSWORD"))
+                else if (ex.Message.Contains("INVALID_PASSWORD"))
                 {
                     TempData["ErrorMsg"] = "Incorrect password. Please try again.";
                 }
@@ -106,9 +100,10 @@ namespace TMS.Controllers.Accounts
                     TempData["ErrorMsg"] = "An error occurred: " + ex.Message;
                 }
 
-                return View(model);  // Return to the login page with error message
+                return View(model);
             }
         }
+
 
         public IActionResult ProfileSetup() 
         {
