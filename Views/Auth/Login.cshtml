@@ -1,19 +1,50 @@
 ﻿@model TMS.ViewModels.LoginViewModel
 
-<form asp-action="Login" method="post">
-    <div>
-        <label asp-for="EmailAdd"></label>
-        <input asp-for="EmailAdd" />
-        <span asp-validation-for="EmailAdd"></span>
+<div class="flex h-screen w-screen flex-row overflow-hidden">
+    @*
+    The Splash Design (Left)
+    *@
+    <div class="-z-0 relative hidden h-full w-7/12 flex-col bg-[#FFFFF7] md:flex">
+        <label class="absolute left-32 top-28 text-6xl font-bold text-[#152852]">MiManuTMS</label>
+        <label class="absolute left-32 top-48 w-[550px] text-4xl font-normal text-[#152852]">
+            A Training Management System
+            MinebeaMitsumi Cebu
+        </label>
+        <div class="opacity-60 absolute -bottom-80 left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
+        <div class="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
+    <div class="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
+        <img class="h-48 w-48" src="~/res/book.png" />
+        <label class="text-3xl">Welcome Back!</label>
+        <label class="text-sm font-medium">Enter Your Credentials To Login</label>
+        <form asp-action="Login" method="post" class="mt-5 flex w-full flex-col gap-5 px-16">
+            <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
+                <img class="h-5 w-5" src="~/res/email.svg" />
+                <input class="border-0 mx-4 w-full bg-transparent placeholder:text-black" placeholder="Email" asp-for="EmailAdd" />
+                <span asp-validation-for="EmailAdd" class="absolute end-0 right-6 text-xs text-red-500"></span>
+            </div>
+            <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
+                <img class="h-5 w-5" src="~/res/password.svg" />
+                <input placeholder="Password" class="border-0 mx-4 w-full bg-transparent placeholder:text-black" asp-for="Password" type="password" />
+                <span asp-validation-for="Password" class="absolute end-0 right-6 text-xs text-red-500"></span>
+            </div>
+            <div class="flex h-auto w-full flex-row items-center justify-between px-12">
+                <div class="flex items-center justify-center gap-3">
+                    <input type="checkbox" id="tosInput" class="border-2 rounded-md border-black" />
+                    <label class="text-sm font-medium" for="tosInput">Remember Me</label>
+                </div>
+                <label class="text-sm font-semibold text-[#DC3A3A] underline"><a href="" target="_blank">Forgot Password?</a></label>
+            </div>
+            <div class="mt-5 flex h-auto w-full items-center justify-center">
+                <button asp-area="" asp-controller="Home" asp-action="Dashboard" class="h-12 w-64 rounded-xl bg-[#DC3A3A] text-white duration-300 hover:bg-[#BC3232]" type="submit">Login</button>
+            </div>
+            <label class="flex h-auto w-full items-center justify-center gap-1 text-xs">Don't Have an Account? <a asp-area="" asp-controller="Auth" asp-action="Register"><span class="font-semibold text-[#DC3A3A] underline"> Register Here!</span></a></label>
+        </form>
     </div>
+</div>
 
-    <button type="submit">Login</button>
-</form>
+
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
