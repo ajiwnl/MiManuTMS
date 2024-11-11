@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Firebase.Auth;
 using Newtonsoft.Json;
 using System.Text;
