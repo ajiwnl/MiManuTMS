@@ -67,16 +67,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
+    <script src="~/js/register.js"></script>
     <script>
-        var errorMsg = '@TempData["ErrorMsg"]';
-
-        if (successMsg) {
-            alert(successMsg);
-        }
-        if (errorMsg) {
-            alert(errorMsg);
-        }
+        regValidation('@TempData["ErrorMsg"]');
     </script>
 }
-

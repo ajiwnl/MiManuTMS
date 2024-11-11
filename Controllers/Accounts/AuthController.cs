@@ -12,11 +12,14 @@ namespace TMS.Controllers.Accounts
     {
         private readonly ILogger<AuthController> _logger;
         private readonly FirebaseAuthProvider _firebaseauth;
+        private readonly FirestoreDb _firestoreDb;
 
-        public AuthController(ILogger<AuthController> logger, FirebaseAuthProvider firebaseauth)
+
+        public AuthController(ILogger<AuthController> logger, FirebaseAuthProvider firebaseauth, FirestoreDb firestoreDb)
         {
             _logger = logger;
             _firebaseauth = firebaseauth;
+            _firestoreDb = firestoreDb;
         }
 
         public IActionResult Index()
@@ -55,8 +58,9 @@ namespace TMS.Controllers.Accounts
 
                 return View(model);
             }
- 
+
         }
+
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -66,20 +70,16 @@ namespace TMS.Controllers.Accounts
 
             try
             {
-                // Attempt to sign in with email and password
                 var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.EmailAdd, model.Password);
 
-                // Retrieve user's info to check if email is verified
                 var user = await _firebaseauth.GetUserAsync(authResult.FirebaseToken);
 
                 if (!user.IsEmailVerified)
                 {
                     TempData["ErrorMsg"] = "Please verify your email before logging in.";
-                    return View(model); // Prevent login if email is not verified
+                    return View(model);
                 }
 
-                // Email is verified, proceed with login
-                // Save user details in session or proceed as per your application needs
                 TempData["SuccessMsg"] = "Login successful!";
                 return RedirectToAction("ProfileSetup");
             }
@@ -104,12 +104,33 @@ namespace TMS.Controllers.Accounts
             }
         }
 
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        public IActionResult ProfileSetup() 
+            await _firebaseauth.SendPasswordResetEmailAsync(model.EmailAdd);
+
+            TempData["SuccessMsg"] = "A password reset link has been sent to your email.";
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult ProfileSetup()
         {
             return View();
         }
-        
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
+            TempData["SuccessMsg"] = "You have successfully logged out.";
+            return RedirectToAction("Login", "Credentials");
+        }
+
 
     }
 }
