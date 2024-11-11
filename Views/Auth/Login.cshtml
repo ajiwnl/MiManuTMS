@@ -17,16 +17,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
+    <script src="~/js/login.js"></script>
     <script>
-        var successMsg = '@TempData["SuccessMsg"]';
-        var errorMsg = '@TempData["ErrorMsg"]';
-
-        if (successMsg) {
-            alert(successMsg);
-        }
-        if (errorMsg) {
-            alert(errorMsg);
-        }
+        loginValidation('@TempData["SuccessMsg"]', '@TempData["ErrorMsg"]');
     </script>
 }

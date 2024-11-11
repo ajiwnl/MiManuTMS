@@ -20,7 +20,7 @@ namespace TMS
 
             // Add FirebaseAuthProvider and FirestoreDb as services
             services.AddSingleton(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD56boXG1u4axBuEom02AEoxjLcu_QpmL4")));
-            services.AddSingleton(FirestoreDb.Create("tms-project"));
+            services.AddSingleton(FirestoreDb.Create("MiManuTMS"));
             services.AddSession();
 
             services.AddSession(options =>
