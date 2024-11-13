@@ -4,21 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TMS</title>
-    <link rel="stylesheet" href="~/css/app.css"/>
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
+    <link rel="stylesheet" href="../styles/app.tailwind.css" asp-append-version="true" />
+    <link rel="stylesheet" href="../styles/app.tailwind.output.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TMS.styles.css" asp-append-version="true" />
-    <style>
-
-
-        input:focus {
-            outline: none;
-            border: none;
-        }
-
-    </style>
 </head>
 <body>
-     @RenderBody()
+    @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
