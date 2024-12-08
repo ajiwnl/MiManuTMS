@@ -1,5 +1,4 @@
 ﻿@model TMS.ViewModels.LoginViewModel
-
 <div class="flex h-screen w-screen flex-row overflow-hidden">
     @*
     The Splash Design (Left)
@@ -36,23 +35,28 @@
                     <input type="checkbox" id="tosInput" class="border-2 rounded-md border-black" />
                     <label class="text-sm font-medium" for="tosInput">Remember Me</label>
                 </div>
-                <label class="text-sm font-semibold text-[#DC3A3A] underline"><a href="" target="_blank">Forgot Password?</a></label>
+                <label class="text-sm font-semibold text-[#DC3A3A] underline"><a asp-action="ForgotPassword">Forgot Password?</a></label>
             </div>
             <div class="mt-5 flex h-auto w-full items-center justify-center">
-                <button asp-area="" asp-controller="Home" asp-action="Dashboard" class="h-12 w-64 rounded-xl bg-[#DC3A3A] text-white duration-300 hover:bg-[#BC3232]" type="submit">Login</button>
+                <button asp-area="" class="h-12 w-64 rounded-xl bg-[#DC3A3A] text-white duration-300 hover:bg-[#BC3232]" type="submit">Login</button>
             </div>
-            <label class="flex h-auto w-full items-center justify-center gap-1 text-xs">Don't Have an Account? <a asp-area="" asp-controller="Auth" asp-action="Register"><span class="font-semibold text-[#DC3A3A] underline"> Register Here!</span></a></label>
         </form>
     </div>
 </div>
 
-
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/login.js"></script>
-    <script>
-        loginValidation('@TempData["SuccessMsg"]', '@TempData["ErrorMsg"]');
-    </script>
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+            alert('@TempData["ErrorMsg"]');
+        </script>
+    }
+
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+            alert('@TempData["SuccessMsg"]');
+        </script>
+    }
 }
