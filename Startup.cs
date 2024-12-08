@@ -1,4 +1,6 @@
 ﻿using Firebase.Auth;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 
 namespace TMS
@@ -15,12 +17,19 @@ namespace TMS
         public void ConfigureServices(IServiceCollection services)
         {
             // Set the environment variable for Firestore credentials
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "json", "tmsproject-e504e-firebase-adminsdk-b90fh-4c2403d3a2.json");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "json", "mimanutms-d516c-firebase-adminsdk-bwby4-88fc704792.json");
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
+            // Initialize FirebaseAdmin SDK for Admin use
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile(path)
+
+            });
+
             // Add FirebaseAuthProvider and FirestoreDb as services
-            services.AddSingleton(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD56boXG1u4axBuEom02AEoxjLcu_QpmL4")));
-            services.AddSingleton(FirestoreDb.Create("MiManuTMS"));
+            services.AddSingleton(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD5vELQoepsUV_K6740n1DGuJk1NOMKXrk")));
+            services.AddSingleton(FirestoreDb.Create("mimanutms-d516c"));
             services.AddSession();
 
             services.AddSession(options =>

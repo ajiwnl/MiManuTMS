@@ -1,71 +1,70 @@
-﻿@model TMS.ViewModels.RegisterViewModel
+﻿<!-- Basic Register View -->
+@model TMS.ViewModels.RegisterViewModel
 
-@*
-    Parent Container
-*@
-<div class="flex h-screen w-screen flex-row overflow-hidden">
-    @*
-    The Splash Design (Left)
-    *@
-    <div class="-z-0 relative hidden h-full w-7/12 flex-col bg-[#FFFFF7] md:flex">
-        <label class="absolute left-32 top-28 text-6xl font-bold text-[#152852]">MiManuTMS</label>
-        <label class="absolute left-32 top-48 w-[550px] text-4xl font-normal text-[#152852]">
-            A Training Management System
-            MinebeaMitsumi Cebu
-        </label>
-        <div class="opacity-60 absolute -bottom-80 left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
-        <div class="opacity-60 absolute -bottom-48 -left-48 h-[500px] w-[500px] rounded-full bg-[#152852]"></div>
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register</h2>
+
+<form asp-action="Register" method="post">
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
-    @*
-    The Register Design (Right)
-    *@
-    <div class="z-10 shadow-x flex h-full w-full flex-col items-center justify-center rounded-s-xl md:w-5/12">
-        <img class="h-48 w-48" src="~/res/book.png" />
-        <label class="text-3xl">Welcome To TMS!</label>
-        <label class="text-sm font-medium">Fill Your Details To Get Started</label>
-        <form asp-action="Register" method="post" class="mt-5 flex w-full flex-col gap-5 px-16">
-            <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-                <img class="h-5 w-5" src="~/res/email.svg" />
-                <input class="border-0 mx-4 w-full bg-transparent placeholder:text-black" placeholder="Email" asp-for="EmailAdd" />
-                <span asp-validation-for="EmailAdd" class="absolute end-0 right-6 text-xs text-red-500"></span>
-            </div>
-            <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-                <img class="h-5 w-5" src="~/res/password.svg" />
-                <input placeholder="Password" class="border-0 mx-4 w-full bg-transparent placeholder:text-black" asp-for="Password" type="password" />
-                <span asp-validation-for="Password" class="absolute end-0 right-6 text-xs text-red-500"></span>
-            </div>
-            <div class="inner-shadow relative flex flex-row items-center rounded-xl px-8 py-2 transition-all duration-300 focus:outline-none focus:border-0">
-                <img class="h-5 w-5" src="~/res/password.svg" />
-                <input placeholder="Confirm Password" class="border-0 mx-4 w-full bg-transparent placeholder:text-black" asp-for="ConfirmPassword" type="password" />
-                <span asp-validation-for="ConfirmPassword" class="absolute end-0 right-6 text-xs text-red-500"></span>
-            </div>
-            <div class="flex flex-row items-center justify-between px-12">
-                <div class="flex flex-row items-center justify-center gap-5">
-                    <input class="border-2 border-black" type="radio" name="userRole" id="userInput" />
-                    <label for="userInput">User</label>
-                </div>
-                <div class="flex flex-row items-center justify-center gap-5">
-                    <input class="border-2 border-black" type="radio" name="userRole" id="trainerInput" />
-                    <label for="trainerInput">Trainer</label>
-                </div>
-            </div>
-            <div class="mt-4 flex h-auto w-full items-center justify-center gap-3">
-                <input type="checkbox" id="tosInput" class="border-2 rounded-md border-black" />
-                <label class="text-xs" for="tosInput">In Registering, You Agree To Our <span class="font-semibold text-[#DC3A3A] underline"><a href="https://www.google.com" target="_blank">Terms of Service</a></span> </label>
-            </div>
-            <div class="flex h-auto w-full items-center justify-center">
-                <button class="h-12 w-64 rounded-xl bg-[#DC3A3A] text-white duration-300 hover:bg-[#BC3232]" type="submit">Register</button>
-            </div>
-            <label class="flex h-auto w-full items-center justify-center gap-1 text-xs">Already Have an Account? <a asp-area="" asp-controller="Auth" asp-action="Login"><span class="font-semibold text-[#DC3A3A] underline"> Login Here!</span></a></label>
-        </form>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-</div>
+
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Role</label><br />
+        <input type="radio" asp-for="Role" value="Admin" /> Admin<br />
+        <input type="radio" asp-for="Role" value="User" /> User<br />
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/register.js"></script>
-    <script>
-        regValidation('@TempData["ErrorMsg"]');
-    </script>
+
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMsg"]</div>
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMsg"]</div>
 }
