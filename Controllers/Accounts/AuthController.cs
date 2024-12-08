@@ -130,13 +130,10 @@ namespace TMS.Controllers.Accounts
                 // Handle Firebase client authentication errors
                 _logger.LogError($"Firebase Client Exception: {ex.Message}");
 
-                if (ex.Message.Contains("INVALID_EMAIL") || ex.Message.Contains("EMAIL_NOT_FOUND"))
+           
+                if (ex.Message.Contains("INVALID_LOGIN_CREDENTIALS"))
                 {
-                    TempData["ErrorMsg"] = "Email not found. Please check your email address.";
-                }
-                else if (ex.Message.Contains("INVALID_PASSWORD"))
-                {
-                    TempData["ErrorMsg"] = "Incorrect password. Please try again.";
+                    TempData["ErrorMsg"] = "Incorrect email or password. Please try again.";
                 }
                 else
                 {
@@ -160,5 +157,55 @@ namespace TMS.Controllers.Accounts
                 return View(model);
             }
         }
+
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                // Try to send the password reset email
+                await _firebaseauth.SendPasswordResetEmailAsync(model.Email);
+
+                // If no error occurs, inform the user that the reset link is sent
+                TempData["SuccessMsg"] = "A password reset link has been sent to your email.";
+            }
+            catch (FirebaseAuthException ex)
+            {
+                _logger.LogError($"Firebase Exception: {ex.Message}");
+
+                // Check if the error is related to a non-existing user
+                if (ex.Message.Contains("USER_NOT_FOUND"))
+                {
+                    TempData["ErrorMsg"] = "The email address is not registered. Please check the email and try again.";
+                }
+                else
+                {
+                    TempData["ErrorMsg"] = "An error occurred. Please try again later.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"General Exception: {ex.Message}");
+                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+            }
+
+            return RedirectToAction("Login");
+        }
+
+
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
+
+            TempData["SuccessMsg"] = "You have successfully logged out.";
+            return RedirectToAction("Login");
+        }
+
     }
 }

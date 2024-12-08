@@ -56,15 +56,17 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    @if (TempData["ErrorMsg"] != null)
+    {
+        <script type="text/javascript">
+            alert('@TempData["ErrorMsg"]');
+        </script>
+    }
 
-}
-
-@if (TempData["ErrorMsg"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMsg"]</div>
-}
-
-@if (TempData["SuccessMsg"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMsg"]</div>
+    @if (TempData["SuccessMsg"] != null)
+    {
+        <script type="text/javascript">
+            alert('@TempData["SuccessMsg"]');
+        </script>
+    }
 }
