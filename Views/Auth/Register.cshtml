@@ -10,27 +10,27 @@
 <form asp-action="Register" method="post">
     <div class="form-group">
         <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
+        <input asp-for="FirstName" id="FirstName" class="form-control" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
+        <input asp-for="LastName" id="LastName" class="form-control" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Username"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+        <input asp-for="Username" id="Username" disabled class="form-control" />
+        <span asp-validation-for="Username" id="UsernameSpan" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Role</label><br />
-        <input type="radio" asp-for="Role" value="Admin" /> Admin<br />
-        <input type="radio" asp-for="Role" value="User" /> User<br />
-        <span asp-validation-for="Role" class="text-danger"></span>
+        <input type="radio" asp-for="Role" id="Trainor" value="Trainor" onclick="clearRoleError()" /> Trainor<br />
+        <input type="radio" asp-for="Role" id="Employee" value="Employee" onclick="clearRoleError()" /> Employee<br />
+        <span asp-validation-for="Role" class="text-danger" id="RoleError"></span>
     </div>
 
     <div class="form-group">
@@ -69,4 +69,59 @@
             alert('@TempData["SuccessMsg"]');
         </script>
     }
+
+    <script>
+        // Function to remove the validation message
+        function clearRoleError() {
+            const roleError = document.getElementById("RoleError");
+            if (roleError) {
+                roleError.textContent = ""; // Clear the error message
+            }
+        }
+    </script>
+
+    <script>
+        // Function to generate the username
+        function generateUsername() {
+            const firstName = document.getElementById("FirstName").value.trim().toLowerCase();
+            const lastName = document.getElementById("LastName").value;
+            const roleEmployee = document.getElementById("Employee").checked;
+            const roleTrainer = document.getElementById("Trainor").checked;
+            const usernameField = document.getElementById("Username");
+            const usernameValidationSpan = document.getElementById("UsernameSpan");
+
+
+            if (!firstName || !lastName) {
+                usernameField.value = ""; // Clear the username if names are empty
+                return;
+            }
+
+            const firstLetter = firstName.charAt(0); // First letter of the first name
+            let prefix = "";
+
+            if (roleEmployee) {
+                prefix = "EMP_";
+            } else if (roleTrainer) {
+                prefix = "TR_";
+            }
+
+            if (prefix) {
+                usernameField.value = `${prefix}${firstLetter}${lastName}`;
+            } else {
+                usernameField.value = ""; // Clear if no role is selected
+            }
+
+            if (usernameField.value && usernameValidationSpan) {
+                usernameValidationSpan.textContent = "";
+            }
+        }
+
+        // Add event listeners to trigger username generation
+        document.getElementById("FirstName").addEventListener("input", generateUsername);
+        document.getElementById("LastName").addEventListener("input", generateUsername);
+        document.getElementById("Employee").addEventListener("change", generateUsername);
+        document.getElementById("Trainor").addEventListener("change", generateUsername);
+    </script>
+
+
 }
