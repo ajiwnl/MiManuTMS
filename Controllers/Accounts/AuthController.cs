@@ -109,7 +109,7 @@ namespace TMS.Controllers.Accounts
             {
                 // Attempt to sign in with Firebase Authentication (Client SDK)
                 var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.Email, model.Password);
-
+                var uid = authResult.User.LocalId;
                 // Retrieve user record from Firebase Admin SDK (Server SDK)
                 var userRecord = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.GetUserAsync(authResult.User.LocalId);
 
@@ -120,8 +120,22 @@ namespace TMS.Controllers.Accounts
                     return View(model);
                 }
 
-                // Save session data for the authenticated user
-                HttpContext.Session.SetString("FirebaseUserId", authResult.User.LocalId);
+                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    TempData["ErrorMsg"] = "User not found.";
+                    return View(model);
+                }
+
+                var user = snapshot.ConvertTo<mAuth>();
+
+                // Store user details in the session
+                HttpContext.Session.SetString("UID", user.UID);
+                HttpContext.Session.SetString("FirstName", user.FirstName);
+                HttpContext.Session.SetString("LastName", user.LastName);
+                HttpContext.Session.SetString("UserImg", user.UserImg);
                 TempData["SuccessMsg"] = "Login successful!";
                 return RedirectToAction("Dashboard", "Home");
             }
@@ -163,7 +177,7 @@ namespace TMS.Controllers.Accounts
             try
             {
                 // Get the logged-in user's UID from the session
-                var uid = HttpContext.Session.GetString("FirebaseUserId");
+                var uid = HttpContext.Session.GetString("UID");
                 if (string.IsNullOrEmpty(uid))
                 {
                     TempData["ErrorMsg"] = "You need to log in to view your profile.";
