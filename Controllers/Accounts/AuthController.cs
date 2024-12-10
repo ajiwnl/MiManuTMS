@@ -216,6 +216,134 @@ namespace TMS.Controllers.Accounts
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            try
+            {
+                var uid = HttpContext.Session.GetString("UID");
+                if (string.IsNullOrEmpty(uid))
+                {
+                    TempData["ErrorMsg"] = "You need to log in to edit your profile.";
+                    return RedirectToAction("Login");
+                }
+
+                // Fetch user data from Firestore
+                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    TempData["ErrorMsg"] = "User profile not found.";
+                    return RedirectToAction("Login");
+                }
+
+                var user = snapshot.ConvertTo<mAuth>();
+
+                var editProfileViewModel = new EditProfileViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserImg = user.UserImg,
+                    Email = user.Email
+                };
+
+                return View(editProfileViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error fetching profile for editing: {ex.Message}");
+                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var uid = HttpContext.Session.GetString("UID");
+                if (string.IsNullOrEmpty(uid))
+                {
+                    TempData["ErrorMsg"] = "You need to log in to edit your profile.";
+                    return RedirectToAction("Login");
+                }
+
+                // Fetch user data from Firestore
+                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    TempData["ErrorMsg"] = "User profile not found.";
+                    return RedirectToAction("Login");
+                }
+
+                var user = snapshot.ConvertTo<mAuth>();
+
+                // Update Firestore user document
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.UserImg = model.UserImg;
+
+                // Generate new username if FirstName or LastName has changed
+                user.Username = GenerateUsername(model.FirstName, model.LastName, user.UserRole);
+
+                // Update email if changed
+                if (user.Email != model.Email)
+                {
+                    var firebaseUser = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.GetUserAsync(uid);
+                    var updateRequest = new FirebaseAdmin.Auth.UserRecordArgs
+                    {
+                        Uid = uid,
+                        Email = model.Email
+                    };
+                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(updateRequest);
+
+                    user.Email = model.Email;
+                }
+
+                // Update password if a new password is provided
+                if (!string.IsNullOrWhiteSpace(model.NewPassword))
+                {
+                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(new FirebaseAdmin.Auth.UserRecordArgs
+                    {
+                        Uid = uid,
+                        Password = model.NewPassword
+                    });
+                }
+
+                await docRef.SetAsync(user);
+
+                // Update session with new data
+                HttpContext.Session.SetString("FirstName", user.FirstName);
+                HttpContext.Session.SetString("LastName", user.LastName);
+                HttpContext.Session.SetString("UserImg", user.UserImg);
+
+                TempData["SuccessMsg"] = "Profile updated successfully.";
+                return RedirectToAction("Profile");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating profile: {ex.Message}");
+                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+                return View(model);
+            }
+        }
+
+        private string GenerateUsername(string firstName, string lastName, string role)
+        {
+            string prefix = role == "Employee" ? "EMP_" : role == "Trainer" ? "TR_" : "";
+            string firstLetter = !string.IsNullOrWhiteSpace(firstName) ? firstName.Trim().ToLower()[0].ToString() : "";
+            return $"{prefix}{firstLetter}{lastName.Trim()}".ToLower();
+        }
+
 
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
