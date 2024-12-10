@@ -158,6 +158,51 @@ namespace TMS.Controllers.Accounts
             }
         }
 
+        public async Task<IActionResult> Profile()
+        {
+            try
+            {
+                // Get the logged-in user's UID from the session
+                var uid = HttpContext.Session.GetString("FirebaseUserId");
+                if (string.IsNullOrEmpty(uid))
+                {
+                    TempData["ErrorMsg"] = "You need to log in to view your profile.";
+                    return RedirectToAction("Login");
+                }
+
+                // Retrieve the user data from Firestore
+                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    TempData["ErrorMsg"] = "User profile not found.";
+                    return RedirectToAction("Login");
+                }
+
+                // Map Firestore data to a ViewModel
+                var user = snapshot.ConvertTo<mAuth>();
+                var profileViewModel = new ProfileViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Username = user.Username,
+                    Email = user.Email,
+                    UserRole = user.UserRole,
+                    UserImg = user.UserImg
+                };
+
+                return View(profileViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error fetching user profile: {ex.Message}");
+                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+                return RedirectToAction("Login");
+            }
+        }
+
+
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (!ModelState.IsValid)
