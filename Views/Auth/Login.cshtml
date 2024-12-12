@@ -49,14 +49,14 @@
     @if (TempData["ErrorMsg"] != null)
     {
         <script type="text/javascript">
-            alert('@TempData["ErrorMsg"]');
+            toastr.error('@TempData["ErrorMsg"]');
         </script>
     }
 
     @if (TempData["SuccessMsg"] != null)
     {
         <script type="text/javascript">
-            alert('@TempData["SuccessMsg"]');
+            toastr.success('@TempData["SuccessMsg"]');
         </script>
     }
 }
