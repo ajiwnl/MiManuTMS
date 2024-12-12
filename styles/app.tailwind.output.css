@@ -863,6 +863,10 @@ video {
   border-radius: 0.75rem;
 }
 
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
 .rounded-s-xl {
   border-start-start-radius: 0.75rem;
   border-end-start-radius: 0.75rem;
@@ -924,6 +928,11 @@ video {
   padding-bottom: 0.5rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -956,6 +965,11 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .font-bold {
@@ -2185,6 +2199,16 @@ select {
   background-color: rgb(188 50 50 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-white:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-\[\#0C1830\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(12 24 48 / var(--tw-bg-opacity, 1));
+}
+
 .focus\:border-0:focus {
   border-width: 0px;
 }
@@ -2192,6 +2216,16 @@ select {
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.group:hover .group-hover\:bg-\[\#152852\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 40 82 / var(--tw-bg-opacity, 1));
+}
+
+.group:hover .group-hover\:text-\[\#152852\] {
+  --tw-text-opacity: 1;
+  color: rgb(21 40 82 / var(--tw-text-opacity, 1));
 }
 
 @media (min-width: 768px) {

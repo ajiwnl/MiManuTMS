@@ -1,5 +1,6 @@
 ﻿@{
     var getRole = Context.Session.GetString("UserRole");
+    //Role Based Navigation Bar
 }
 
 <div class="shadow-y flex h-20 w-full items-center justify-between px-8">
@@ -7,11 +8,18 @@
         <img src="~/res/book.png" class="h-16 w-16 drop-shadow-lg" />
         <label class="text-lg font-bold text-[#152852]">MiManuTMS</label>
     </div>
-    @if(getRole == "Admin")
+    @if(getRole == "Admin") // Admins
     {
-        //Let This Be Empty or Show A Different Nav Selection
+        <a class="group flex flex-row items-center justify-center gap-4 rounded-lg bg-[#152852] px-4 py-2 duration-300 hover:bg-[#0C1830]" asp-area="" asp-controller="Auth" asp-action="Register">
+            <svg class="cursor-pointer" width="30" height="30" viewBox="-2 -2 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12.5" cy="12.5" r="11.5" stroke="#FFFFFF" stroke-width="3" />
+                <path d="M12.5 6.94434V18.0554" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6.94434 12.5H18.0554" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <label class="cursor-pointer text-lg font-semibold text-white">Register Users</label>
+        </a>
     }
-    else
+    else //Employee || Trainor
     {
         <div class="flex flex-row gap-8">
             <div class="flex flex-row items-center justify-center gap-4">
