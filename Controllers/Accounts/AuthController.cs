@@ -136,6 +136,7 @@ namespace TMS.Controllers.Accounts
                 HttpContext.Session.SetString("FirstName", user.FirstName);
                 HttpContext.Session.SetString("LastName", user.LastName);
                 HttpContext.Session.SetString("UserImg", user.UserImg);
+                HttpContext.Session.SetString("UserRole", user.UserRole);
                 TempData["SuccessMsg"] = "Login successful!";
                 return RedirectToAction("Dashboard", "Home");
             }

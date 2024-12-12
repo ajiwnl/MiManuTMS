@@ -1,0 +1,8 @@
+﻿@await Html.PartialAsync("Navbar")
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <script type="text/javascript">
+        toastr.success('@TempData["SuccessMsg"]');
+    </script>
+}
