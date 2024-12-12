@@ -1,0 +1,13 @@
+﻿@{
+    var ErrorMsg = "";
+
+    if (TempData["NotLoggedInMsg"] != null)
+    {
+        ErrorMsg = TempData["NotLoggedInMsg"].ToString();
+    }
+}
+
+<div class="flex h-screen w-screen flex-col items-center justify-center gap-5">
+    <label class="text-6xl">Whoops... Something Went Wrong!</label>
+    <label class="text-2xl text-red-500">@ErrorMsg</label>
+</div>

@@ -20,10 +20,11 @@ namespace TMS.Controllers.Home
             }
             else if (userRole == "Admin")
             { 
-               return View("AdminDashboard"); 
+               return View("AdminDashboard");
             }
 
-            return View("ErrorView");
+            TempData["NotLoggedInMsg"] = "Please Try Logging In!";
+            return RedirectToAction("Error", "Status");
         }
     }
 }
