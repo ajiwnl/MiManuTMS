@@ -216,54 +216,12 @@ namespace TMS.Controllers.Accounts
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EditProfile()
-        {
-            try
-            {
-                var uid = HttpContext.Session.GetString("UID");
-                if (string.IsNullOrEmpty(uid))
-                {
-                    TempData["ErrorMsg"] = "You need to log in to edit your profile.";
-                    return RedirectToAction("Login");
-                }
-
-                // Fetch user data from Firestore
-                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-
-                if (!snapshot.Exists)
-                {
-                    TempData["ErrorMsg"] = "User profile not found.";
-                    return RedirectToAction("Login");
-                }
-
-                var user = snapshot.ConvertTo<mAuth>();
-
-                var editProfileViewModel = new EditProfileViewModel
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    UserImg = user.UserImg,
-                    Email = user.Email
-                };
-
-                return View(editProfileViewModel);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error fetching profile for editing: {ex.Message}");
-                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
-                return RedirectToAction("Login");
-            }
-        }
-
-        [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                TempData["ErrorMsg"] = "Please ensure all fields are correctly filled.";
+                return RedirectToAction("Profile");
             }
 
             try
@@ -275,73 +233,107 @@ namespace TMS.Controllers.Accounts
                     return RedirectToAction("Login");
                 }
 
-                // Fetch user data from Firestore
-                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
-                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+                var userDocRef = _firestoreDb.Collection("Users").Document(uid);
+                var userSnapshot = await userDocRef.GetSnapshotAsync();
 
-                if (!snapshot.Exists)
+                if (!userSnapshot.Exists)
                 {
                     TempData["ErrorMsg"] = "User profile not found.";
                     return RedirectToAction("Login");
                 }
 
-                var user = snapshot.ConvertTo<mAuth>();
+                var updates = new Dictionary<string, object>();
 
-                // Update Firestore user document
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.UserImg = model.UserImg;
-
-                // Generate new username if FirstName or LastName has changed
-                user.Username = GenerateUsername(model.FirstName, model.LastName, user.UserRole);
-
-                // Update email if changed
-                if (user.Email != model.Email)
+                // Update email
+                if (!string.IsNullOrEmpty(model.Email))
                 {
-                    var firebaseUser = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.GetUserAsync(uid);
-                    var updateRequest = new FirebaseAdmin.Auth.UserRecordArgs
+                    var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.CurrentPassword);
+                    var token = authResult.FirebaseToken;
+
+                    // Use Firebase Admin SDK to update email
+                    var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
                     {
-                        Uid = uid,
+                        Uid = authResult.User.LocalId,
                         Email = model.Email
                     };
-                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(updateRequest);
 
-                    user.Email = model.Email;
+                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
+
+                    // Optionally send email verification
+                    await _firebaseauth.SendEmailVerificationAsync(token);
+
+                    updates["Email"] = model.Email;
+                    TempData["SuccessMsg"] = "Email updated successfully. Please verify your new email address.";
+                    HttpContext.Session.Clear();
+                    return RedirectToAction("Login");
                 }
 
-                // Update password if a new password is provided
-                if (!string.IsNullOrWhiteSpace(model.NewPassword))
+
+                // Update password
+                if (!string.IsNullOrEmpty(model.OldPassword) &&
+                    !string.IsNullOrEmpty(model.NewPassword) &&
+                    !string.IsNullOrEmpty(model.ConfirmPassword))
                 {
-                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(new FirebaseAdmin.Auth.UserRecordArgs
+                    if (model.NewPassword != model.ConfirmPassword)
                     {
-                        Uid = uid,
+                        TempData["ErrorMsg"] = "New password and confirmation password do not match.";
+                        return RedirectToAction("Profile");
+                    }
+
+                    var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.OldPassword);
+
+                    // Use Firebase Admin SDK to update password
+                    var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
+                    {
+                        Uid = authResult.User.LocalId,
                         Password = model.NewPassword
-                    });
+                    };
+
+                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
+
+                    TempData["SuccessMsg"] = "Password updated successfully.";
                 }
 
-                await docRef.SetAsync(user);
 
-                // Update session with new data
-                HttpContext.Session.SetString("FirstName", user.FirstName);
-                HttpContext.Session.SetString("LastName", user.LastName);
-                HttpContext.Session.SetString("UserImg", user.UserImg);
+                // Update profile image
+                if (model.UserImgFile != null)
+                {
+                    if (model.UserImgFile.ContentType.StartsWith("image/"))
+                    {
+                        // Save the image to a file hosting service or storage (not shown here)
+                        // Example: var imageUrl = await UploadImageToStorageAsync(model.UserImgFile);
+                        var imageUrl = "https://example.com/your-uploaded-image.jpg"; // Placeholder URL
+                        updates["UserImg"] = imageUrl;
+                        TempData["SuccessMsg"] = "Profile image updated successfully.";
+                    }
+                    else
+                    {
+                        TempData["ErrorMsg"] = "Please upload a valid image file.";
+                        return RedirectToAction("Profile");
+                    }
+                }
+
+                // Apply updates in batch
+                if (updates.Count > 0)
+                {
+                    await userDocRef.UpdateAsync(updates);
+                }
 
                 TempData["SuccessMsg"] = "Profile updated successfully.";
                 return RedirectToAction("Profile");
             }
+            catch (FirebaseAuthException ex)
+            {
+                _logger.LogError($"Firebase Exception: {ex.Message}");
+                TempData["ErrorMsg"] = "An error occurred: " + ex.Message;
+            }
             catch (Exception ex)
             {
-                _logger.LogError($"Error updating profile: {ex.Message}");
+                _logger.LogError($"General Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
-                return View(model);
             }
-        }
 
-        private string GenerateUsername(string firstName, string lastName, string role)
-        {
-            string prefix = role == "Employee" ? "EMP_" : role == "Trainer" ? "TR_" : "";
-            string firstLetter = !string.IsNullOrWhiteSpace(firstName) ? firstName.Trim().ToLower()[0].ToString() : "";
-            return $"{prefix}{firstLetter}{lastName.Trim()}".ToLower();
+            return RedirectToAction("Profile");
         }
 
 
@@ -382,8 +374,6 @@ namespace TMS.Controllers.Accounts
 
             return RedirectToAction("Login");
         }
-
-
 
         public IActionResult Logout()
         {

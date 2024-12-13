@@ -1,24 +1,30 @@
 ﻿@model TMS.ViewModels.EditProfileViewModel
 
-<div class="edit-profile-container">
-    <h1>Edit Profile</h1>
+<h2>Edit Profile</h2>
 
-    <form asp-action="EditProfile" method="post">
-        <label for="FirstName">First Name:</label>
-        <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" required />
+<form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="Email">Email</label>
+        <input asp-for="Email" />
+    </div>
 
-        <label for="LastName">Last Name:</label>
-        <input type="text" id="LastName" name="LastName" value="@Model.LastName" required />
+    <div>
+        <label for="OldPassword">Old Password</label>
+        <input asp-for="OldPassword" type="password" />
+    </div>
+    <div>
+        <label for="NewPassword">New Password</label>
+        <input asp-for="NewPassword" type="password" />
+    </div>
+    <div>
+        <label for="ConfirmPassword">Confirm Password</label>
+        <input asp-for="ConfirmPassword" type="password" />
+    </div>
 
-        <label for="UserImg">Profile Image URL:</label>
-        <input type="text" id="UserImg" name="UserImg" value="@Model.UserImg" />
+    <div>
+        <label for="UserImgFile">Profile Image</label>
+        <input asp-for="UserImgFile" type="file" />
+    </div>
 
-        <label for="Email">Email:</label>
-        <input type="email" id="Email" name="Email" value="@Model.Email" required />
-
-        <label for="NewPassword">New Password:</label>
-        <input type="password" id="NewPassword" name="NewPassword" />
-
-        <button type="submit">Save Changes</button>
-    </form>
-</div>
+    <button type="submit">Update</button>
+</form>
