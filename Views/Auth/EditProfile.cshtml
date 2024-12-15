@@ -1,24 +1,38 @@
 ﻿@model TMS.ViewModels.EditProfileViewModel
+@await Html.PartialAsync("Navbar")
 
-<div class="edit-profile-container">
-    <h1>Edit Profile</h1>
+<div class="flex h-full w-full flex-row">
+    <!--The Side Container-->
+    <div class="h-full w-3/12 p-8">
+        @await Html.PartialAsync("Sidebar")
+    </div>
 
-    <form asp-action="EditProfile" method="post">
-        <label for="FirstName">First Name:</label>
-        <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" required />
+    <!--The Main Container-->
+    <div class="flex h-full w-9/12 flex-col gap-4 p-8">
+        <div class="border-b-2 border-b-red-500 py-2">
+            <label class="w-full text-xl font-semibold text-[#152852]">Edit Profile</label>
+        </div>
 
-        <label for="LastName">Last Name:</label>
-        <input type="text" id="LastName" name="LastName" value="@Model.LastName" required />
+        <!--Not Final Layout-->
+        <form class="flex flex-col" asp-action="EditProfile" method="post">
+            <label for="FirstName">First Name:</label>
+            <input type="text" id="FirstName" name="FirstName" value="@Model.FirstName" required />
 
-        <label for="UserImg">Profile Image URL:</label>
-        <input type="text" id="UserImg" name="UserImg" value="@Model.UserImg" />
+            <label for="LastName">Last Name:</label>
+            <input type="text" id="LastName" name="LastName" value="@Model.LastName" required />
 
-        <label for="Email">Email:</label>
-        <input type="email" id="Email" name="Email" value="@Model.Email" required />
+            <label for="UserImg">Profile Image URL:</label>
+            <input type="text" id="UserImg" name="UserImg" value="@Model.UserImg" />
 
-        <label for="NewPassword">New Password:</label>
-        <input type="password" id="NewPassword" name="NewPassword" />
+            <label for="Email">Email:</label>
+            <input type="email" id="Email" name="Email" value="@Model.Email" required />
 
-        <button type="submit">Save Changes</button>
-    </form>
-</div>
+            <label for="NewPassword">New Password:</label>
+            <input type="password" id="NewPassword" name="NewPassword" />
+
+            <button type="submit">Save Changes</button>
+        </form>
+        <!--End-->
+    </div>
+ </div>
+

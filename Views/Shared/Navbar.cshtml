@@ -32,8 +32,8 @@
             <a class="flex flex-row items-center justify-center gap-4 duration-300">
                 <label class="cursor-pointer text-lg text-[#152852]">Diagnostic</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4 duration-300">
-                <label class="cursor-pointer text-lg text-[#152852]">Settings</label>
+            <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Auth" asp-action="Profile">
+                <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] @(ViewData["ActivePage"] as string == "Profile" ? "bg-[#152852] text-white" : "")">Settings</label>
             </a>
         </div>
     }

@@ -208,6 +208,7 @@ namespace TMS.Controllers.Accounts
                     UserImg = user.UserImg
                 };
 
+                ViewData["ActivePage"] = "Profile";
                 return View(profileViewModel);
             }
             catch (Exception ex)
@@ -250,6 +251,7 @@ namespace TMS.Controllers.Accounts
                     Email = user.Email
                 };
 
+                ViewData["ActivePage"] = "Edit Profile";
                 return View(editProfileViewModel);
             }
             catch (Exception ex)
