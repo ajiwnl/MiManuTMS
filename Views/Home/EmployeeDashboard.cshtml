@@ -1,5 +1,55 @@
 ﻿@await Html.PartialAsync("Navbar")
 
+<div class="flex h-full w-full flex-col px-24 py-8">
+    <label class="text-xl font-bold text-[#152852]">
+        Your Tasks
+    </label>
+    <!--Task Container-->
+    <div class="mt-5 flex w-full justify-center">
+        <div class="shadow-xy flex h-80 w-11/12 flex-col items-center justify-center rounded-xl">
+            <img src="~/res/rocket.png"/>
+            <label class="text-xl">You've Completed All Your Tasks!</label>
+            <label class="text-sm">Try Other Courses or Read Some Tips</label>
+        </div>
+    </div>
+
+    <div class="mt-8 flex flex-row gap-4">
+        <!--Tips Container-->
+        <div class="flex h-full w-9/12 flex-col gap-4">
+            <label class="text-xl font-bold text-[#152852]">
+                Weekly Tips
+            </label>
+            <div class="flex flex-row flex-wrap justify-evenly gap-8">
+                <div class="shadow-xy h-[275px] w-[350px] rounded-xl">
+                    <div class="flex h-[110px] w-full items-center justify-center rounded-t-xl bg-rose-300">
+                        <img class="h-20 w-20" src="~/res/sample_tip.png" />    
+                    </div>
+                    <div class="flex flex-col px-6 py-4">
+                        <label class="text-lg font-semibold">Test Yourself</label>
+                        <label class="text-sm">How would you tell a skeptical team about a change mandated from above?</label>
+                        <div class="mt-5 flex flex-row items-center gap-3">
+                            <label class="rounded-lg bg-rose-300 px-6 py-1 text-sm text-white">Leading Change</label>
+                            <label class="text-xs text-gray-400">~7 Minute Read</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Microcourses-->
+        <div class="flex h-full w-3/12 flex-col gap-4">
+            <label class="text-xl font-bold text-[#152852]">
+                Microcourses
+            </label>
+            <div class="shadow-xy flex h-32 w-full flex-col items-center justify-center gap-2 rounded-xl">
+                <img src="~/res/sample_microcourse.png"/>
+                <label class="font-semibold">Persuading Others</label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @if (TempData["SuccessMsg"] != null)
 {
     <script type="text/javascript">

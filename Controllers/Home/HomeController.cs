@@ -9,18 +9,19 @@ namespace TMS.Controllers.Home
         public IActionResult Dashboard()
         {
             var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["ActivePage"] = "Dashboard";
 
-            if(userRole == "Employee") 
-            { 
-               return View("EmployeeDashboard"); 
+            if (userRole == "Employee") 
+            {
+                return View("EmployeeDashboard"); 
             } 
             else if (userRole == "Trainor")
-            { 
-               return View("TrainorDashboard"); 
+            {
+                return View("TrainorDashboard"); 
             }
             else if (userRole == "Admin")
-            { 
-               return View("AdminDashboard");
+            {
+                return View("AdminDashboard");
             }
 
             TempData["NotLoggedInMsg"] = "Please Try Logging In!";
