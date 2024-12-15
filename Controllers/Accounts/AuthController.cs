@@ -208,6 +208,7 @@ namespace TMS.Controllers.Accounts
                     UserImg = user.UserImg
                 };
 
+                ViewData["ActivePage"] = "Profile";
                 return View(profileViewModel);
             }
             catch (Exception ex)
@@ -334,7 +335,7 @@ namespace TMS.Controllers.Accounts
                 _logger.LogError($"General Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
             }
-
+            ViewData["ActivePage"] = "Edit Profile";
             return RedirectToAction("Profile");
         }
 
