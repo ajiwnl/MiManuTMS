@@ -1,14 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TMS.ViewModels
+namespace TMS.ViewModels 
 {
     public class EditProfileViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserImg { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
-        public string NewPassword { get; set; } // Optional field for updating password
+
+        [Required]
+        public string CurrentEmail { get; set; }
+
+        [Required]
+        public string CurrentPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        public string OldPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        public IFormFile UserImgFile { get; set; }
     }
+
+
 
 }

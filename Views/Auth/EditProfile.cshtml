@@ -1,1 +1,43 @@
-﻿
+﻿@model TMS.ViewModels.EditProfileViewModel
+@await Html.PartialAsync("Navbar")
+
+<div class="flex h-full w-full flex-row">
+    <!--The Side Container-->
+    <div class="h-full w-3/12 p-8">
+        @await Html.PartialAsync("Sidebar")
+    </div>
+
+    <!--The Main Container-->
+    <div class="flex h-full w-9/12 flex-col gap-4 p-8">
+        <div class="border-b-2 border-b-red-500 py-2">
+            <label class="w-full text-xl font-semibold text-[#152852]">Edit Profile</label>
+        </div>
+
+        <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="Email">Email</label>
+                <input asp-for="Email" />
+            </div>
+
+            <div>
+                <label for="OldPassword">Old Password</label>
+                <input asp-for="OldPassword" type="password" />
+            </div>
+            <div>
+                <label for="NewPassword">New Password</label>
+                <input asp-for="NewPassword" type="password" />
+            </div>
+            <div>
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" />
+            </div>
+
+            <div>
+                <label for="UserImgFile">Profile Image</label>
+                <input asp-for="UserImgFile" type="file" />
+            </div>
+
+            <button type="submit">Update</button>
+        </form>
+    </div>
+ </div>
