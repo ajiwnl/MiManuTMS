@@ -28,6 +28,7 @@ namespace TMS.Controllers.Accounts
         {
             if (!ModelState.IsValid)
             {
+                ViewData["ActivePage"] = "Register";
                 return View(model);
             }
 

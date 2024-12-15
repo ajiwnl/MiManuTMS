@@ -11,11 +11,11 @@
     @if(getRole == "Admin") // Admins
     {
         <div class="flex flex-row gap-8">
-            <a class="flex flex-row items-center justify-center gap-4 duration-300 hover:underline" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                <label class="cursor-pointer text-lg text-[#152852]">Home</label>
+            <a class="flex flex-row items-center justify-center gap-4" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] duration-300 @(ViewData["ActivePage"] as string == "Dashboard" ? "bg-[#152852] text-white" : "") hover:bg-[#152852] hover:text-white">Home</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4 duration-300 hover:underline" asp-area="" asp-controller="Auth" asp-action="Register">
-                <label class="cursor-pointer text-lg text-[152852]">Register</label>
+            <a class="flex flex-row items-center justify-center gap-4" asp-area="" asp-controller="Auth" asp-action="Register">
+                <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] duration-300 @(ViewData["ActivePage"] as string == "Register" ? "bg-[#152852] text-white" : "") hover:bg-[#152852] hover:text-white">Register</label>
             </a>
         </div>
 
@@ -23,16 +23,16 @@
     else //Employee || Trainor
     {
         <div class="flex flex-row gap-8">
-            <a class="flex flex-row items-center justify-center gap-4 duration-300 hover:underline" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                <label class="cursor-pointer text-lg text-[#152852]">Home</label>
+            <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] duration-300 @(ViewData["ActivePage"] as string == "Dashboard" ? "bg-[#152852] text-white" : "")">Home</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4" asp-area="" asp-controller="Courses" asp-action="Course">
+            <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Courses" asp-action="Course">
                 <label class="cursor-pointer text-lg text-[#152852]">Courses</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4">
+            <a class="flex flex-row items-center justify-center gap-4 duration-300">
                 <label class="cursor-pointer text-lg text-[#152852]">Diagnostic</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4">
+            <a class="flex flex-row items-center justify-center gap-4 duration-300">
                 <label class="cursor-pointer text-lg text-[#152852]">Settings</label>
             </a>
         </div>
