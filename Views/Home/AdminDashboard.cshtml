@@ -1,4 +1,8 @@
-﻿@await Html.PartialAsync("Navbar")
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@await Html.PartialAsync("Navbar")
 
 <div class="flex h-full w-full flex-col gap-12 px-24 py-8">
     <!--The Welcome and Search Container-->
