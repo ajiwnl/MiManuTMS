@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Courses";
+
+    int currentMonth = ViewBag.CurrentMonth;
+    int currentYear = ViewBag.CurrentYear;
+
+    DateTime firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
+    int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+    int startDay = (int)firstDayOfMonth.DayOfWeek;
+
+    DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
+    DateTime nextMonth = firstDayOfMonth.AddMonths(1);
+
+    string[] daysOfWeek = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+
+    DateTime today = DateTime.Today;
+}
+
+@await Html.PartialAsync("Navbar")
+
+<div class="flex h-full w-full flex-row gap-5 px-24 py-16">
+    <!--Courses Section-->
+    <div class="flex h-full w-9/12 flex-col gap-5">
+        <!--Search-->
+        <div class="flex flex-row items-center justify-between">
+            <div class="relative">
+                <input class="shadow-xy border-0 w-96 rounded-full px-8 py-2" placeholder="Find Tags, Course Titles, Employees" />
+                <svg class="absolute right-4 top-2" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.88894 18.7779C14.7982 18.7779 18.7779 14.7982 18.7779 9.88894C18.7779 4.97971 14.7982 1 9.88894 1C4.97971 1 1 4.97971 1 9.88894C1 14.7982 4.97971 18.7779 9.88894 18.7779Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M20.9999 21.0004L16.1665 16.167" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+        <label class="text-xl font-bold text-[#152852]">Assigned Courses</label>
+        <!--Courses Container-->
+        <div class="flex flex-row flex-wrap gap-5">
+            <!--Sample 1 Entry-->
+            <div class="shadow-xy relative flex h-[180px] w-[350px] flex-col gap-1 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4">
+                <label class="max-w-[200px] text-xl text-white">Leading at the Speed of Trust 4.0</label>
+                <label class="text-gray-200">August 30 2024 - December 30 2024</label>
+                <div class="mt-2 flex flex-row gap-4">
+                    <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Leadership</label>
+                    <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Trust</label>
+                </div>
+                <img class="-z-0 absolute bottom-4 right-4" src="~/res/People.png" />
+            </div>
+        </div>
+    </div>
+
+        <!-- Calendar and Tasks Section -->
+    <div class="flex h-full w-3/12 flex-col gap-5">
+        <div class="shadow-xy rounded-lg bg-white p-5 text-center">
+            <!-- Navigation -->
+            <div class="mb-4 flex flex-row items-center justify-evenly">
+                <a href="@Url.Action("Course", new { month = prevMonth.Month, year = prevMonth.Year })" 
+                   class="rounded-md">
+                    <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.18311 1.175L2.35811 5L6.18311 8.825L4.99977 10L-0.000227928 5L4.99977 0L6.18311 1.175Z" fill="#B5BEC6"/>
+                    </svg>
+                </a>
+                 <label class="text-xl text-[#152852]">@firstDayOfMonth.ToString("MMMM yyyy")</label>
+                <a href="@Url.Action("Course", new { month = nextMonth.Month, year = nextMonth.Year })" 
+                   class="rounded-md">
+                    <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 8.825L3.825 5L0 1.175L1.18333 0L6.18333 5L1.18333 10L0 8.825Z" fill="#B5BEC6"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Calendar Table -->
+            <table class="mx-auto w-full table-auto border-collapse text-sm">
+                <!-- Header: Days of the Week -->
+                <thead>
+                    <tr>
+                        @foreach (var day in daysOfWeek)
+                        {
+                            <th class="text-xs text-[#152852]">@day</th>
+                        }
+                    </tr>
+                </thead>
+                <!-- Calendar Body -->
+                <tbody>
+                    <tr>
+                        @{
+                            int dayCounter = 1;
+                            int totalCells = startDay + daysInMonth;
+
+                            for (int i = 0; i < totalCells; i++)
+                            {
+                                if (i < startDay)
+                                {
+                                    <!-- Empty Cell Before the First Day -->
+                                    <td class="h-8"></td>
+                                }
+                                else
+                                {
+                                    DateTime currentDay = new DateTime(currentYear, currentMonth, dayCounter);
+
+                                    <td class="h-8 text-center text-xs @(currentDay == today ? "bg-[#152852] text-white font-bold rounded-full" : "text-gray-700")">
+                                        @dayCounter
+                                    </td>
+
+                                    dayCounter++;
+
+                                    // Start a new row after every Saturday
+                                    if ((i + 1) % 7 == 0 && i < totalCells - 1)
+                                    {
+                                        @:</tr><tr>
+                                    }
+                                }
+                            }
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--Assignment Section-->
+        <div class="flex flex-col">
+            <label class="text-xl font-bold text-[#152852]">Tasks</label>
+            <!-- Tasks Display -->
+            <div class="mt-5 flex flex-col items-center justify-center gap-5">
+                <img class="h-20 w-20" src="~/res/confetti.png"/>
+                <label class="max-w-[125px] text-wrap text-center text-lg text-[#152852]">You Have No Tasks Currently!</label>
+            </div>
+        </div>
+    </div>
+</div>
