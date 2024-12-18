@@ -24,6 +24,26 @@ namespace TMS.Controllers.Courses
             return RedirectToAction("Error", "Status");
         }
 
+        [HttpGet]
+        public IActionResult CourseInfo(string? name)
+        {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["ActivePage"] = "Courses";
+            ViewData["CurrentTab"] = "CourseInfo";
+
+            if (userRole == "Employee")
+            {
+                return View("CourseInfo");
+            }
+            else if (userRole == "Trainor")
+            {
+                return View("TCourseInfo");
+            }
+
+            TempData["NotLoggedInMsg"] = "Please Try Logging In!";
+            return RedirectToAction("Error", "Status");
+        }
+
         public void Calendar(int? month, int? year)
         {
             var currentDate = DateTime.Now;
