@@ -29,6 +29,7 @@ namespace TMS.Controllers.Courses
         {
             var userRole = HttpContext.Session.GetString("UserRole");
             ViewData["ActivePage"] = "Courses";
+            ViewData["CourseName"] = name;
             ViewData["CurrentTab"] = "CourseInfo";
 
             if (userRole == "Employee")
