@@ -1,11 +1,11 @@
 ﻿@await Html.PartialAsync("Navbar")
 
-<div class="flex h-full w-full flex-col px-24 py-8">
+<div class="flex h-full w-full flex-col px-8 py-8 md:px-24">
     <label class="mt-5 text-xl font-bold text-[#152852]">
         Analytics
     </label>
-    <div class="mt-5 flex flex-row justify-evenly gap-5">
-        <div class="shadow-xy relative flex h-40 w-[400px] flex-col justify-center gap-1 rounded-xl px-8 py-6">
+    <div class="mt-5 flex flex-col justify-evenly gap-5 md:flex-row">
+        <div class="shadow-xy relative flex h-40 w-full flex-col justify-center gap-1 rounded-xl px-8 py-6 md:w-[400px]">
             <div class="flex flex-row items-center gap-12">
                 <label class="text-6xl font-semibold">200</label>
                 <div class="flex flex-row items-center justify-center gap-1 text-lg font-semibold">
@@ -23,7 +23,7 @@
 
         </div>
 
-        <div class="shadow-xy relative flex h-40 w-[400px] flex-col justify-center gap-1 rounded-xl px-8 py-6">
+        <div class="shadow-xy relative flex h-40 w-full flex-col justify-center gap-1 rounded-xl px-8 py-6 md:w-[400px]">
             <div class="flex flex-row items-center gap-12">
                 <label class="text-6xl font-semibold">50</label>
                 <div class="flex flex-row items-center justify-center gap-1 text-lg font-semibold">
@@ -48,7 +48,7 @@
         <div class="shadow-xy flex h-80 w-11/12 flex-col items-center justify-center rounded-xl">
             <img src="~/res/rocket.png" />
             <label class="text-xl">No Tasks Available</label>
-            <label class="text-sm">Try Enabling Tasks or Adding Some For Employees To Take!</label>
+            <label class="max-w-[300px] text-center text-sm md:w-full">Try Enabling Tasks or Adding Some For Employees To Take!</label>
         </div>
     </div>
 </div>

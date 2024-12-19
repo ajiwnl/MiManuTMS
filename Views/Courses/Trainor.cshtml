@@ -18,11 +18,11 @@
 
 @await Html.PartialAsync("Navbar")
 
-<div class="flex h-full w-full flex-row gap-12 px-24 py-16">
+<div class="flex h-full w-full flex-col gap-12 px-8 py-8 md:flex-row md:px-24 md:py-16">
     <!--Trainor Courses Section-->
-    <div class="flex h-full w-9/12 flex-col gap-5">
+    <div class="flex h-full w-full flex-col gap-5 md:w-9/12">
         <!--Search-->
-        <div class="flex flex-row items-center justify-between gap-5">
+        <div class="flex flex-col items-center justify-between gap-5 md:flex-row">
             <div class="relative">
                 <input class="shadow-xy border-0 w-96 rounded-full px-8 py-2" placeholder="Find Tags, Course Titles, Employees" />
                 <svg class="absolute right-4 top-2" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,9 +38,9 @@
         </div>
         <label class="text-xl font-bold text-[#152852]">Your Added Courses</label>
         <!--Courses Container-->
-        <div class="flex flex-row flex-wrap gap-5">
+        <div class="flex flex-wrap gap-5 md:flex-row">
             <!--Sample 1 Entry-->
-            <div class="shadow-xy relative flex h-[180px] w-[350px] flex-col gap-1 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4">
+            <div class="shadow-xy relative flex h-[180px] w-full flex-col gap-1 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4 md:w-[350px]">
                 <label class="max-w-[200px] text-xl text-white">Leading at the Speed of Trust 4.0</label>
                 <label class="text-gray-200">August 30 2024 - December 30 2024</label>
                 <div class="mt-2 flex flex-row gap-4">
@@ -53,7 +53,7 @@
     </div>
 
         <!-- Calendar and Tasks Section -->
-    <div class="flex h-full w-3/12 flex-col gap-5">
+    <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
         <div class="shadow-xy rounded-lg bg-white p-5 text-center">
             <!-- Navigation -->
             <div class="mb-4 flex flex-row items-center justify-evenly">
