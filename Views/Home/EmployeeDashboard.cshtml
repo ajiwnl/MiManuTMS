@@ -1,27 +1,27 @@
 ﻿@await Html.PartialAsync("Navbar")
 
-<div class="flex h-full w-full flex-col px-24 py-8">
+<div class="flex h-full w-full flex-col px-8 py-8 md:px-24">
     <label class="text-xl font-bold text-[#152852]">
         Your Tasks
     </label>
     <!--Task Container-->
     <div class="mt-5 flex w-full justify-center">
-        <div class="shadow-xy flex h-80 w-11/12 flex-col items-center justify-center rounded-xl">
+        <div class="shadow-xy flex h-80 w-full flex-col items-center justify-center rounded-xl md:w-11/12">
             <img src="~/res/rocket.png"/>
             <label class="text-xl">You've Completed All Your Tasks!</label>
             <label class="text-sm">Try Other Courses or Read Some Tips</label>
         </div>
     </div>
 
-    <div class="mt-8 flex flex-row gap-4">
+    <div class="mt-8 flex flex-col gap-4 md:flex-row">
         <!--Tips Container-->
-        <div class="flex h-full w-9/12 flex-col gap-4">
+        <div class="flex h-full w-full flex-col gap-4 md:w-9/12">
             <label class="text-xl font-bold text-[#152852]">
                 Weekly Tips
             </label>
             <div class="flex flex-row flex-wrap justify-evenly gap-8">
                 <!--Sample 1 Entry of Tip-->
-                <div class="shadow-xy h-[275px] w-[350px] rounded-xl">
+                <div class="shadow-xy h-[275px] w-full rounded-xl md:w-[350px]">
                     <div class="flex h-[110px] w-full items-center justify-center rounded-t-xl bg-rose-300">
                         <img class="h-20 w-20" src="~/res/sample_tip.png" />    
                     </div>
@@ -38,7 +38,7 @@
         </div>
 
         <!--Microcourses-->
-        <div class="flex h-full w-3/12 flex-col gap-4">
+        <div class="flex h-full w-full flex-col gap-4 md:w-3/12">
             <label class="text-xl font-bold text-[#152852]">
                 Microcourses
             </label>
@@ -54,9 +54,9 @@
     </div>
     <div class="mt-5 flex flex-row flex-wrap justify-evenly gap-5">
         <!--Sample Trainor List-->
-        <div class="shadow-xy relative flex h-[280px] w-[300px] flex-col items-center gap-2 rounded-xl">
+        <div class="shadow-xy relative flex h-[280px] w-full flex-col items-center gap-2 rounded-xl md:w-[300px]">
             <div class="h-1/3 w-full rounded-t-xl bg-gradient-to-b from-rose-300 to-rose-500"></div>
-            <div class="absolute left-4 top-12 translate-x-2/3 transform">
+            <div class="absolute top-12 transform md:left-4 md:top-12 md:translate-x-2/3">
                 <img src="~/res/SampleProfile.jpg" class="h-28 w-28 rounded-full" />
                 <div class="flex flex-col items-center justify-center">
                     <label class="text-xl font-semibold text-black">EMP_kMacas</label>

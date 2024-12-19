@@ -8,8 +8,8 @@
 
 <!--Sample Selected Course Layout-->
 
-<div class="flex h-full w-full flex-col gap-5 overflow-y-auto px-24 py-16">
-    <div class="shadow-xy relative flex h-56 w-full flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4">
+<div class="flex h-full w-full flex-col gap-5 overflow-y-auto px-8 py-8 md:px-24 md:py-16">
+    <div class="shadow-xy relative flex h-full w-full flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-8 md:py-4 md:h-56">
         <label class="max-w-[400px] text-xl text-white">Leading at the Speed of Trust 4.0</label>
         <label class="max-w-[800px] text-sm text-white">
             Involves essential strategies like setting a clear vision, encouraging open communication,
@@ -25,9 +25,9 @@
     </div>
 
     <!--Sub Layouts Section-->
-    <div class="flex h-full w-full flex-row gap-8">
+    <div class="flex h-full w-full flex-col gap-8 md:flex-row">
         <!--Left Layout-->
-        <div class="flex h-full w-3/12 flex-col gap-5">
+        <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
             <div class="shadow-xy flex h-64 w-full flex-col rounded-xl py-6">
                 <div class="px-8 font-semibold">
                     <label class="text-[#152852]">Quick Actions</label>
@@ -44,8 +44,8 @@
         </div>
 
         <!--Right Layout-->
-        <div class="flex h-full w-9/12 flex-col gap-8">
-            <div class="shadow-xy flex h-60 w-full flex-col gap-3 rounded-xl p-5">
+        <div class="flex h-full w-full flex-col gap-8 md:w-9/12">
+            <div class="shadow-xy flex h-full w-full flex-col gap-3 rounded-xl p-5 md:h-60">
                 <label class="text-lg font-semibold text-[#152852]">Current Module</label>
                 <label class="text-[#152852]">10.5 Leading Your Team: Critical Practices for Success</label>
                 <label class="text-[#152852]">
@@ -65,8 +65,8 @@
             </div>   
 
             <!--Lower Section-->
-            <div class="flex h-full w-full flex-row gap-5">
-                <div class="flex h-full w-2/4 flex-col p-5">
+            <div class="flex h-full w-full flex-col gap-5 md:flex-row">
+                <div class="flex h-full w-full flex-col p-5 md:w-2/4">
                     <div class="flex w-full flex-row items-center justify-between">
                         <label class="text-xl font-semibold text-[#152852]">Result Summary</label>
                         <label class="text-4xl font-semibold text-green-400">A+</label>
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex h-full w-2/4 flex-col gap-5 p-5">
+                <div class="flex h-full w-full flex-col gap-5 p-5 md:w-2/4">
                     <label class="text-xl font-semibold text-[#152852]">Recent Tasks</label>
                     <div class="flex flex-row items-center justify-center gap-5">
                         <img src="~/res/confetti.png" class="h-16 w-16" />
