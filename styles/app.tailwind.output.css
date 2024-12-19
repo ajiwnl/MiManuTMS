@@ -758,6 +758,10 @@ video {
   height: 33.333333%;
 }
 
+.h-1\/6 {
+  height: 16.666667%;
+}
+
 .h-12 {
   height: 3rem;
 }
@@ -794,8 +798,20 @@ video {
   height: 13rem;
 }
 
+.h-56 {
+  height: 14rem;
+}
+
+.h-60 {
+  height: 15rem;
+}
+
 .h-64 {
   height: 16rem;
+}
+
+.h-72 {
+  height: 18rem;
 }
 
 .h-8 {
@@ -842,20 +858,8 @@ video {
   height: 100vh;
 }
 
-.h-60 {
-  height: 15rem;
-}
-
-.h-56 {
-  height: 14rem;
-}
-
-.h-72 {
-  height: 18rem;
-}
-
-.h-1\/6 {
-  height: 16.666667%;
+.h-96 {
+  height: 24rem;
 }
 
 .w-1\/2 {
@@ -880,6 +884,10 @@ video {
 
 .w-2\/3 {
   width: 66.666667%;
+}
+
+.w-2\/4 {
+  width: 50%;
 }
 
 .w-20 {
@@ -950,10 +958,6 @@ video {
   width: 100vw;
 }
 
-.w-2\/4 {
-  width: 50%;
-}
-
 .max-w-\[125px\] {
   max-width: 125px;
 }
@@ -966,12 +970,12 @@ video {
   max-width: 400px;
 }
 
-.max-w-\[500px\] {
-  max-width: 500px;
-}
-
 .max-w-\[800px\] {
   max-width: 800px;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
 }
 
 .table-auto {
@@ -1009,6 +1013,10 @@ video {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.items-end {
+  align-items: flex-end;
 }
 
 .items-center {
@@ -1219,6 +1227,11 @@ video {
   --tw-gradient-to: #f43f5e var(--tw-gradient-to-position);
 }
 
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .p-5 {
   padding: 1.25rem;
 }
@@ -1335,6 +1348,10 @@ video {
   font-weight: 700;
 }
 
+.font-extralight {
+  font-weight: 200;
+}
+
 .font-medium {
   font-weight: 500;
 }
@@ -1345,10 +1362,6 @@ video {
 
 .font-semibold {
   font-weight: 600;
-}
-
-.font-extralight {
-  font-weight: 200;
 }
 
 .uppercase {
@@ -1394,6 +1407,11 @@ video {
   color: rgb(55 65 81 / var(--tw-text-opacity, 1));
 }
 
+.text-green-400 {
+  --tw-text-opacity: 1;
+  color: rgb(74 222 128 / var(--tw-text-opacity, 1));
+}
+
 .text-green-500 {
   --tw-text-opacity: 1;
   color: rgb(34 197 94 / var(--tw-text-opacity, 1));
@@ -1407,16 +1425,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
-}
-
-.text-green-400 {
-  --tw-text-opacity: 1;
-  color: rgb(74 222 128 / var(--tw-text-opacity, 1));
 }
 
 .underline {
