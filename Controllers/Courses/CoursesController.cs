@@ -8,6 +8,7 @@ namespace TMS.Controllers.Courses
         {
             var userRole = HttpContext.Session.GetString("UserRole");
             ViewData["ActivePage"] = "Courses";
+            ViewData["CActPageResult"] = "Course";
 
             Calendar(month, year);
 
@@ -60,6 +61,29 @@ namespace TMS.Controllers.Courses
             else if (userRole == "Trainor")
             {
                 return View("TCourseModules");
+            }
+
+            TempData["NotLoggedInMsg"] = "Please Try Logging In!";
+            return RedirectToAction("Error", "Status");
+        }
+
+        public IActionResult Tasks(string? name, int? month, int? year)
+        {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            ViewData["ActivePage"] = "Courses";
+            ViewData["CourseName"] = name;
+            ViewData["CurrentTab"] = "CourseTask";
+            ViewData["CActPageResult"] = "Tasks";
+
+            Calendar(month, year);
+
+            if (userRole == "Employee")
+            {
+                return View("Task");
+            }
+            else if (userRole == "Trainor")
+            {
+                return View("TTask");
             }
 
             TempData["NotLoggedInMsg"] = "Please Try Logging In!";

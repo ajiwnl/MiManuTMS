@@ -1,19 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Courses";
-
-    int currentMonth = ViewBag.CurrentMonth;
-    int currentYear = ViewBag.CurrentYear;
-
-    DateTime firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
-    int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-    int startDay = (int)firstDayOfMonth.DayOfWeek;
-
-    DateTime prevMonth = firstDayOfMonth.AddMonths(-1);
-    DateTime nextMonth = firstDayOfMonth.AddMonths(1);
-
-    string[] daysOfWeek = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
-
-    DateTime today = DateTime.Today;
 }
 
 @await Html.PartialAsync("Navbar")
@@ -48,80 +34,17 @@
             </a>
         </div>
     </div>
-
-        <!-- Calendar and Tasks Section -->
+        
+    <!-- Calendar and Tasks Section -->
     <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
-        <div class="shadow-xy rounded-lg bg-white p-5 text-center">
-            <!-- Navigation -->
-            <div class="mb-4 flex flex-row items-center justify-evenly">
-                <a href="@Url.Action("Course", new { month = prevMonth.Month, year = prevMonth.Year })" 
-                   class="rounded-md">
-                    <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.18311 1.175L2.35811 5L6.18311 8.825L4.99977 10L-0.000227928 5L4.99977 0L6.18311 1.175Z" fill="#B5BEC6"/>
-                    </svg>
-                </a>
-                 <label class="text-xl text-[#152852]">@firstDayOfMonth.ToString("MMMM yyyy")</label>
-                <a href="@Url.Action("Course", new { month = nextMonth.Month, year = nextMonth.Year })" 
-                   class="rounded-md">
-                    <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 8.825L3.825 5L0 1.175L1.18333 0L6.18333 5L1.18333 10L0 8.825Z" fill="#B5BEC6"/>
-                    </svg>
-                </a>
-            </div>
+        @await Html.PartialAsync("Calendar")
 
-            <!-- Calendar Table -->
-            <table class="mx-auto w-full table-auto border-collapse text-sm">
-                <!-- Header: Days of the Week -->
-                <thead>
-                    <tr>
-                        @foreach (var day in daysOfWeek)
-                        {
-                            <th class="text-xs text-[#152852]">@day</th>
-                        }
-                    </tr>
-                </thead>
-                <!-- Calendar Body -->
-                <tbody>
-                    <tr>
-                        @{
-                            int dayCounter = 1;
-                            int totalCells = startDay + daysInMonth;
-
-                            for (int i = 0; i < totalCells; i++)
-                            {
-                                if (i < startDay)
-                                {
-                                    <!-- Empty Cell Before the First Day -->
-                                    <td class="h-8"></td>
-                                }
-                                else
-                                {
-                                    DateTime currentDay = new DateTime(currentYear, currentMonth, dayCounter);
-
-                                    <td class="h-8 text-center text-xs @(currentDay == today ? "bg-[#152852] text-white font-bold rounded-full" : "text-gray-700")">
-                                        @dayCounter
-                                    </td>
-
-                                    dayCounter++;
-
-                                    // Start a new row after every Saturday
-                                    if ((i + 1) % 7 == 0 && i < totalCells - 1)
-                                    {
-                                        @:</tr><tr>
-                                    }
-                                }
-                            }
-                        }
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <!--Assignment Section-->
         <div class="flex flex-col">
             <label class="text-xl font-bold text-[#152852]">Tasks</label>
             <!-- Tasks Display -->
             <div class="mt-5 flex flex-col items-center justify-center gap-5">
-                <img class="h-20 w-20" src="~/res/confetti.png"/>
+                <img class="h-20 w-20" src="~/res/confetti.png" />
                 <label class="max-w-[125px] text-wrap text-center text-lg text-[#152852]">You Have No Tasks Currently!</label>
             </div>
         </div>
