@@ -45,8 +45,8 @@
             <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Courses" asp-action="Course">
                 <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] duration-300 @(ViewData["ActivePage"] as string == "Courses" ? "bg-[#152852] text-white" : "")">Courses</label>
             </a>
-            <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Diagnostics" asp-action="Status">
-                <label class="cursor-pointer text-lg text-[#152852]">Diagnostic</label>
+            <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Diagnostic" asp-action="Summary">
+                <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] duration-300 @(ViewData["ActivePage"] as string == "Diagnostic" ? "bg-[#152852] text-white" : "")">Diagnostic</label>
             </a>
             <a class="flex flex-row items-center justify-center gap-4 duration-300" asp-area="" asp-controller="Auth" asp-action="Profile">
                 <label class="cursor-pointer rounded-xl px-4 py-2 text-lg text-[#152852] @(ViewData["ActivePage"] as string == "Profile" ? "bg-[#152852] text-white" : "")">Settings</label>
@@ -66,7 +66,7 @@
                     <path d="M19.8 9.20001L17.15 17.15L9.19995 19.8L11.85 11.85L19.8 9.20001Z" stroke="#152852" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </a>
-            <a class="flex items-center justify-center" asp-area="" asp-controller="Diagnostics" asp-action="Status">
+            <a class="flex items-center justify-center" asp-area="" asp-controller="Diagnostic" asp-action="Summary">
                 <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M26.0124 19.3665C25.2172 21.2476 23.9734 22.9051 22.3899 24.1943C20.8063 25.4834 18.9311 26.3649 16.9282 26.7617C14.9253 27.1585 12.8558 27.0585 10.9005 26.4704C8.94517 25.8823 7.16366 24.8241 5.71169 23.3883C4.25972 21.9524 3.18149 20.1826 2.57128 18.2337C1.96107 16.2847 1.83746 14.2159 2.21125 12.2081C2.58503 10.2004 3.44484 8.31473 4.7155 6.71611C5.98615 5.11749 7.62897 3.85456 9.50032 3.03772" stroke="#152852" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                     <path d="M26.9999 14.5029C26.9999 12.861 26.6766 11.2352 26.0485 9.71825C25.4203 8.20133 24.4996 6.82302 23.3389 5.66202C22.1782 4.50102 20.8002 3.58006 19.2837 2.95173C17.7671 2.3234 16.1417 2 14.5002 2V14.5029H26.9999Z" stroke="#152852" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
