@@ -1,0 +1,67 @@
+﻿@await Html.PartialAsync("Navbar")
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="flex h-full w-full flex-row gap-5 px-8 py-8 md:px-24">
+    <div class="shadow-xy flex h-60 w-3/12 flex-col items-center justify-center rounded-xl p-8">
+        <label class="text-6xl font-bold text-green-400">A+</label>
+        <label class="mt-2 text-xl font-semibold text-[#152852]">Result Status</label>
+        <label class="text-lg text-[#152852]">You're Doing Great!</label>
+    </div>
+    <div class="shadow-xy flex h-full w-9/12 flex-col gap-5 rounded-xl p-8">
+        <label class="text-2xl font-bold text-[#152852]">You are... SELF Aware</label>
+        <label class="text-[#152852]">
+            This is an excellent skill to have, you can adjust the way you do
+            around other people.
+        </label>
+        <div class="flex h-96 w-full items-center justify-center">
+            <canvas id="diagnostic" class="h-96 w-full pb-8"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    const result = document.getElementById('diagnostic').getContext('2d');
+    const horizontalBarChart = new Chart(result, {
+        type: 'bar', // 'bar' type for bar charts
+        label: "Overalls",
+        data: {
+            labels: ['Self-Awareness', 'Presentation', 'Running Meetings', 'Other Skills'],
+            datasets: [{
+                data: [46.11, 30.5, 16, 7.39],
+                label: "Overalls",
+                backgroundColor: [
+                    'rgba(125, 240, 215, 0.6)',
+                    'rgba(125, 240, 215, 0.6)',
+                    'rgba(125, 240, 215, 0.6)',
+                    'rgba(125, 240, 215, 0.6)',
+                ],
+                borderColor: [
+                    'rgba(125, 240, 215, 1)',
+                    'rgba(125, 240, 215, 1)',
+                    'rgba(125, 240, 215, 1)',
+                    'rgba(125, 240, 215, 1)',
+
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
