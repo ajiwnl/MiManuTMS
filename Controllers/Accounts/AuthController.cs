@@ -72,8 +72,8 @@ namespace TMS.Controllers.Accounts
                     return View(model);
                 }
 
-                TempData["SuccessMsg"] = "Registration successful! Please check your email to verify your account before logging in.";
-                return RedirectToAction("Login");
+                TempData["SuccessMsg"] = "Registration successful!";
+                return View(model);
             }
             catch (Firebase.Auth.FirebaseAuthException ex)
             {
@@ -224,6 +224,7 @@ namespace TMS.Controllers.Accounts
         {
             try
             {
+
                 // Get the logged-in user's UID from the session
                 var uid = HttpContext.Session.GetString("UID");
                 if (string.IsNullOrEmpty(uid))
@@ -328,6 +329,7 @@ namespace TMS.Controllers.Accounts
 
                         TempData["SuccessMsg"] = "Email updated successfully. Please verify your new email address.";
                         HttpContext.Session.Clear();
+                        HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
                         return RedirectToAction("Login"); // Redirect after email update
                     }
                     catch (Exception ex)
