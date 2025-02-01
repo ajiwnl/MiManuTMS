@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TMS.ViewModels 
+namespace TMS.ViewModels
 {
     public class EditProfileViewModel
     {
-
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
@@ -25,8 +24,8 @@ namespace TMS.ViewModels
         public string ConfirmPassword { get; set; }
 
         public IFormFile UserImgFile { get; set; }
+
+        public string UserImgUrl { get; set; }
+
     }
-
-
-
 }

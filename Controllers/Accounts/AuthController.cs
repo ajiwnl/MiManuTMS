@@ -219,6 +219,50 @@ namespace TMS.Controllers.Accounts
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            try
+            {
+                // Get the logged-in user's UID from the session
+                var uid = HttpContext.Session.GetString("UID");
+                if (string.IsNullOrEmpty(uid))
+                {
+                    TempData["ErrorMsg"] = "You need to log in to edit your profile.";
+                    return RedirectToAction("Login");
+                }
+
+                // Retrieve the user data from Firestore
+                DocumentReference docRef = _firestoreDb.Collection("Users").Document(uid);
+                DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+                if (!snapshot.Exists)
+                {
+                    TempData["ErrorMsg"] = "User profile not found.";
+                    return RedirectToAction("Login");
+                }
+
+                // Map Firestore data to a ViewModel
+                var user = snapshot.ConvertTo<mAuth>();
+                var editProfileViewModel = new EditProfileViewModel
+                {
+                    Email = user.Email,
+                    UserImgUrl = user.UserImg,  // Set the image URL (not IFormFile)
+                    CurrentEmail = user.Email // Set current email for validation
+                };
+
+                return View(editProfileViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error fetching user profile: {ex.Message}");
+                TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+                return RedirectToAction("Login");
+            }
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
         {
             if (!ModelState.IsValid)
@@ -305,7 +349,7 @@ namespace TMS.Controllers.Accounts
                     {
                         // Save the image to a file hosting service or storage (not shown here)
                         // Example: var imageUrl = await UploadImageToStorageAsync(model.UserImgFile);
-                        var imageUrl = "https://example.com/your-uploaded-image.jpg"; // Placeholder URL
+                        var imageUrl = await UploadImageToStorageAsync(model.UserImgFile); // Implement this method
                         updates["UserImg"] = imageUrl;
                         TempData["SuccessMsg"] = "Profile image updated successfully.";
                     }
