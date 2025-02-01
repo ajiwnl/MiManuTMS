@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Courses";
+}
+
+@await Html.PartialAsync("Navbar")
+
+<div class="flex h-full w-full flex-col gap-5 px-8 py-8 md:flex-row md:px-24 md:py-16">
+    <!--Courses Section-->
+    <div class="flex h-full w-full flex-col gap-5 md:w-9/12">
+        <!--Search-->
+        <div class="flex flex-row items-center justify-center md:justify-between">
+            <div class="relative">
+                <input class="shadow-xy border-0 w-96 rounded-full px-8 py-2" placeholder="Find Tags, Course Titles, Employees" />
+                <svg class="absolute right-4 top-2" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.88894 18.7779C14.7982 18.7779 18.7779 14.7982 18.7779 9.88894C18.7779 4.97971 14.7982 1 9.88894 1C4.97971 1 1 4.97971 1 9.88894C1 14.7982 4.97971 18.7779 9.88894 18.7779Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M20.9999 21.0004L16.1665 16.167" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+        <label class="text-xl font-bold text-[#152852]">Assigned Courses</label>
+        <!--Courses Container-->
+        <div class="flex flex-col flex-wrap gap-5 md:flex-row">
+            <!--Sample 1 Entry-->
+            <a asp-area="" asp-action="CourseInfo" asp-controller="Courses" asp-route-name="test">
+                <div class="shadow-xy relative flex h-[180px] w-full flex-col gap-1 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-4 md:w-[350px]">
+                    <label class="max-w-[200px] cursor-pointer text-xl text-white">Leading at the Speed of Trust 4.0</label>
+                    <label class="cursor-pointer text-gray-200">August 30 2024 - December 30 2024</label>
+                    <div class="mt-2 flex flex-row gap-4">
+                        <label class="z-0 cursor-pointer rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Leadership</label>
+                        <label class="z-0 cursor-pointer rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Trust</label>
+                    </div>
+                    <img class="-z-0 absolute bottom-4 right-4" src="~/res/People.png" />
+                </div>
+            </a>
+        </div>
+    </div>
+        
+    <!-- Calendar and Tasks Section -->
+    <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
+        @await Html.PartialAsync("Calendar")
+
+        <!--Assignment Section-->
+        <div class="flex flex-col">
+            <label class="text-xl font-bold text-[#152852]">Tasks</label>
+            <!-- Tasks Display -->
+            <div class="mt-5 flex flex-col items-center justify-center gap-5">
+                <img class="h-20 w-20" src="~/res/confetti.png" />
+                <label class="max-w-[125px] text-wrap text-center text-lg text-[#152852]">You Have No Tasks Currently!</label>
+            </div>
+        </div>
+    </div>
+</div>

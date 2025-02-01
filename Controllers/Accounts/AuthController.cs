@@ -28,6 +28,7 @@ namespace TMS.Controllers.Accounts
         {
             if (!ModelState.IsValid)
             {
+                ViewData["ActivePage"] = "Register";
                 return View(model);
             }
 
@@ -136,6 +137,7 @@ namespace TMS.Controllers.Accounts
                 HttpContext.Session.SetString("FirstName", user.FirstName);
                 HttpContext.Session.SetString("LastName", user.LastName);
                 HttpContext.Session.SetString("UserImg", user.UserImg);
+                HttpContext.Session.SetString("UserRole", user.UserRole);
                 TempData["SuccessMsg"] = "Login successful!";
                 return RedirectToAction("Dashboard", "Home");
             }
@@ -206,6 +208,7 @@ namespace TMS.Controllers.Accounts
                     UserImg = user.UserImg
                 };
 
+                ViewData["ActivePage"] = "Profile";
                 return View(profileViewModel);
             }
             catch (Exception ex)
@@ -376,7 +379,7 @@ namespace TMS.Controllers.Accounts
                 _logger.LogError($"General Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
             }
-
+            ViewData["ActivePage"] = "Edit Profile";
             return RedirectToAction("Profile");
         }
 

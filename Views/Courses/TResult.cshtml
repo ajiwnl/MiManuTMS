@@ -1,0 +1,66 @@
+﻿@await Html.PartialAsync("Navbar")
+
+<div class="flex h-full w-full flex-col gap-5 overflow-y-auto px-8 py-8 md:px-24 md:py-16">
+
+    <div class="shadow-xy relative flex h-full w-full flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-900 to-blue-500 px-8 py-8 md:py-4 md:h-56">
+        <label class="max-w-[400px] text-xl text-white">Leading at the Speed of Trust 4.0</label>
+        <label class="max-w-[800px] text-sm text-white">
+            Involves essential strategies like setting a clear vision, encouraging open communication,
+            fostering collaboration, and empowering team members to achieve goals
+            effectively.
+        </label>
+        <label class="text-xs font-extralight text-gray-300">August 30 2024 - December 30 2024</label>
+        <div class="mt-2 flex flex-row gap-4">
+            <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Leadership</label>
+            <label class="z-0 rounded-xl bg-gray-900 px-6 py-1 text-center text-white">Trust</label>
+        </div>
+        <img class="-z-0 absolute bottom-4 right-4" src="~/res/People.png" />
+    </div>
+
+    <div class="flex h-full w-full flex-row gap-8">
+        <div class="flex h-full w-full flex-col gap-5 md:w-3/12">
+            <div class="shadow-xy flex h-64 w-full flex-col rounded-xl py-6">
+                <div class="px-8 font-semibold">
+                    <label class="text-[#152852]">Quick Actions</label>
+                </div>
+
+                <!--Quick Actions Sidebar-->
+                @await Html.PartialAsync("CourseSidebar")
+            </div>
+
+            <div class="shadow-xy relative flex h-32 w-full flex-col justify-center gap-1 rounded-xl px-8 py-6">
+                <div class="flex flex-row items-center gap-12">
+                    <label class="text-3xl font-semibold">1</label>
+                    <div class="flex flex-row items-center justify-center gap-1 text-lg font-semibold">
+                        <label class="text-green-500">+1</label>
+                        <img class="h-[11px] w-[15px]" src="~/res/up_green.png" />
+                    </div>
+                </div>
+                <label class="text-xl">Users Applied</label>
+                <svg class="absolute right-4 top-6 h-20 w-20" width="109" height="91" viewBox="0 0 109 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M77.4545 86.6363V77.4545C77.4545 72.5841 75.5198 67.9133 72.076 64.4694C68.6321 61.0256 63.9612 59.0908 59.0909 59.0908H22.3636C17.4933 59.0908 12.8224 61.0256 9.37858 64.4694C5.93473 67.9133 4 72.5841 4 77.4545V86.6363" stroke="#BEBEBE" stroke-opacity="0.3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M40.7272 40.7273C50.8691 40.7273 59.0908 32.5056 59.0908 22.3636C59.0908 12.2217 50.8691 4 40.7272 4C30.5852 4 22.3635 12.2217 22.3635 22.3636C22.3635 32.5056 30.5852 40.7273 40.7272 40.7273Z" stroke="#BEBEBE" stroke-opacity="0.3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M105 86.6356V77.4538C104.997 73.385 103.643 69.4325 101.15 66.2167C98.6571 63.001 95.1669 60.7042 91.2273 59.687" stroke="#BEBEBE" stroke-opacity="0.3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M72.8635 4.59619C76.8136 5.60757 80.3147 7.90486 82.815 11.1259C85.3152 14.3469 86.6723 18.3085 86.6723 22.386C86.6723 26.4635 85.3152 30.425 82.815 33.646C80.3147 36.8671 76.8136 39.1644 72.8635 40.1757" stroke="#BEBEBE" stroke-opacity="0.3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+
+        <!--Sample User Progression Layout-->
+        <div class="flex h-full w-full flex-col md:w-9/12">
+            <label class="text-lg font-semibold text-[#152852]">User Progress</label>
+            <div class="shadow-xy mt-5 flex h-24 w-full flex-row rounded-xl p-2">
+               <div class="flex h-full w-2/12 items-center justify-center p-8">
+                    <img src="~/res/SampleProfile.jpg" class="rounded-full"/>    
+               </div>
+               <div class="flex h-full w-7/12 flex-col justify-center">
+                    <label class="font-semibold text-[#152852]">EMP_kJames</label>
+                    <label class="text-xl font-semibold text-green-500">A</label>
+               </div>
+               <div class="flex h-full w-3/12 items-center justify-center">
+                    <label class="font-semibold text-[#152852]">90% Completion </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
