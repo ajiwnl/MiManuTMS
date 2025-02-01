@@ -4,13 +4,14 @@ namespace TMS.ViewModels
 {
     public class EditProfileViewModel
     {
+        [Required]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
-        [Required]
         public string CurrentEmail { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string CurrentPassword { get; set; }
 
         [DataType(DataType.Password)]
