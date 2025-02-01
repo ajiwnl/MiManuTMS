@@ -261,15 +261,14 @@ namespace TMS.Controllers.Accounts
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
         {
-            if (!ModelState.IsValid)
+/*            if (!ModelState.IsValid)
             {
-                TempData["ErrorMsg"] = "Please ensure all fields are correctly filled.";
-                return RedirectToAction("Profile");
-            }
+                _logger.LogWarning("Form submission invalid. ModelState is not valid.");
+                return View(model); // Stay on the form page to fix errors
+            }*/
 
             try
             {
@@ -277,6 +276,7 @@ namespace TMS.Controllers.Accounts
                 if (string.IsNullOrEmpty(uid))
                 {
                     TempData["ErrorMsg"] = "You need to log in to edit your profile.";
+                    _logger.LogWarning("User is not logged in. UID is null or empty.");
                     return RedirectToAction("Login");
                 }
 
@@ -286,101 +286,81 @@ namespace TMS.Controllers.Accounts
                 if (!userSnapshot.Exists)
                 {
                     TempData["ErrorMsg"] = "User profile not found.";
+                    _logger.LogWarning("User profile not found for UID: " + uid);
                     return RedirectToAction("Login");
                 }
 
                 var updates = new Dictionary<string, object>();
 
-                // Update email
-                if (!string.IsNullOrEmpty(model.Email))
+                // Ensure user is authenticated with their current email and password
+                _logger.LogInformation("Authenticating user with current email: " + model.CurrentEmail);
+                var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.CurrentPassword);
+                if (authResult == null)
                 {
-                    var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.CurrentPassword);
-                    var token = authResult.FirebaseToken;
-
-                    // Use Firebase Admin SDK to update email
-                    var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
-                    {
-                        Uid = authResult.User.LocalId,
-                        Email = model.Email
-                    };
-
-                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
-
-                    // Optionally send email verification
-                    await _firebaseauth.SendEmailVerificationAsync(token);
-
-                    updates["Email"] = model.Email;
-                    TempData["SuccessMsg"] = "Email updated successfully. Please verify your new email address.";
-                    HttpContext.Session.Clear();
-                    return RedirectToAction("Login");
+                    _logger.LogError("Authentication failed for user: " + model.CurrentEmail);
+                    TempData["ErrorMsg"] = "Authentication failed. Please check your current email and password.";
+                    return View(model);
                 }
+                var token = authResult.FirebaseToken;
 
-
-                // Update password
-                if (!string.IsNullOrEmpty(model.OldPassword) &&
-                    !string.IsNullOrEmpty(model.NewPassword) &&
-                    !string.IsNullOrEmpty(model.ConfirmPassword))
+                // Update email logic
+                if (!string.IsNullOrEmpty(model.Email) && model.Email != model.CurrentEmail)
                 {
-                    if (model.NewPassword != model.ConfirmPassword)
+                    _logger.LogInformation("Updating email from: " + model.CurrentEmail + " to: " + model.Email);
+                    try
                     {
-                        TempData["ErrorMsg"] = "New password and confirmation password do not match.";
-                        return RedirectToAction("Profile");
+                        var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
+                        {
+                            Uid = authResult.User.LocalId,
+                            Email = model.Email
+                        };
+
+                        // Update email in Firebase Authentication
+                        await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
+
+                        // Send email verification
+                        await _firebaseauth.SendEmailVerificationAsync(token);
+
+                        // Update email in Firestore
+                        updates["Email"] = model.Email;
+                        await userDocRef.UpdateAsync(updates);  // Update the Firestore Users collection
+                        _logger.LogInformation("Email updated successfully in Firestore. Verification email sent to: " + model.Email);
+
+                        TempData["SuccessMsg"] = "Email updated successfully. Please verify your new email address.";
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Login"); // Redirect after email update
                     }
-
-                    var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.OldPassword);
-
-                    // Use Firebase Admin SDK to update password
-                    var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
+                    catch (Exception ex)
                     {
-                        Uid = authResult.User.LocalId,
-                        Password = model.NewPassword
-                    };
-
-                    await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
-
-                    TempData["SuccessMsg"] = "Password updated successfully.";
-                }
-
-
-                // Update profile image
-                if (model.UserImgFile != null)
-                {
-                    if (model.UserImgFile.ContentType.StartsWith("image/"))
-                    {
-                        // Save the image to a file hosting service or storage (not shown here)
-                        // Example: var imageUrl = await UploadImageToStorageAsync(model.UserImgFile);
-                        var imageUrl = await UploadImageToStorageAsync(model.UserImgFile); // Implement this method
-                        updates["UserImg"] = imageUrl;
-                        TempData["SuccessMsg"] = "Profile image updated successfully.";
-                    }
-                    else
-                    {
-                        TempData["ErrorMsg"] = "Please upload a valid image file.";
-                        return RedirectToAction("Profile");
+                        _logger.LogError($"Error updating email: {ex.Message}");
+                        TempData["ErrorMsg"] = "An error occurred while updating the email.";
+                        return View(model);  // Stay on the form page to fix errors
                     }
                 }
 
-                // Apply updates in batch
+                // Apply other profile updates if necessary
                 if (updates.Count > 0)
                 {
                     await userDocRef.UpdateAsync(updates);
+                    _logger.LogInformation("Profile updates saved successfully.");
                 }
 
                 TempData["SuccessMsg"] = "Profile updated successfully.";
                 return RedirectToAction("Profile");
+
             }
             catch (FirebaseAuthException ex)
             {
                 _logger.LogError($"Firebase Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An error occurred: " + ex.Message;
+                return View(model);  // Stay on the form page to fix errors
             }
             catch (Exception ex)
             {
                 _logger.LogError($"General Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
+                return View(model);  // Stay on the form page to fix errors
             }
-            ViewData["ActivePage"] = "Edit Profile";
-            return RedirectToAction("Profile");
         }
 
 

@@ -59,41 +59,6 @@
                     <img src="@Model.UserImg" alt="Profile Picture" class="rounded-full" width="150" height="150">
                 </a>
             </div>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th>First Name</th>
-                        <td>@Model.FirstName</td>
-                    </tr>
-                    <tr>
-                        <th>Last Name</th>
-                        <td>@Model.LastName</td>
-                    </tr>
-                    <tr>
-                        <th>Username</th>
-                        <td>@Model.Username</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <span id="email-display">@Model.Email</span>
-                                <input id="email-edit" type="email" class="form-control d-none" value="@Model.Email" style="width: auto; margin-left: 10px;">
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Role</th>
-                        <td>@Model.UserRole</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="mt-3 text-center">
-                <a class="btn btn-warning" asp-action="EditProfile">Edit Profile</a>
-                <a  class="btn btn-danger" asp-action="Logout">Logout</a>
-            </div>
-        </div>
     </div>
 </div>
 

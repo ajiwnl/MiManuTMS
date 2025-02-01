@@ -12,32 +12,23 @@
         <div class="border-b-2 border-b-red-500 py-2">
             <label class="w-full text-xl font-semibold text-[#152852]">Edit Profile</label>
         </div>
-
         <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
             <div>
-                <label for="Email">Email</label>
+                <input asp-for="CurrentEmail" readonly/>
+            </div>
+
+            <div>
+                <label for="CurrentPassword">Current Password</label>
+                <input asp-for="CurrentPassword" type="password" />
+            </div>
+
+            <div>
+                <label for="Email">New Email</label>
                 <input asp-for="Email" />
-            </div>
-
-            <div>
-                <label for="OldPassword">Old Password</label>
-                <input asp-for="OldPassword" type="password" />
-            </div>
-            <div>
-                <label for="NewPassword">New Password</label>
-                <input asp-for="NewPassword" type="password" />
-            </div>
-            <div>
-                <label for="ConfirmPassword">Confirm Password</label>
-                <input asp-for="ConfirmPassword" type="password" />
-            </div>
-
-            <div>
-                <label for="UserImgFile">Profile Image</label>
-                <input asp-for="UserImgFile" type="file" />
             </div>
 
             <button type="submit">Update</button>
         </form>
+
     </div>
  </div>
