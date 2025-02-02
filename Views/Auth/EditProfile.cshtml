@@ -14,24 +14,25 @@
         </div>
 
         <!-- Profile Image Section (outside the form) -->
-        <div class="profile-image-section mb-4">
-            <label for="userImgFile" class="text-lg font-semibold text-[#152852]">Profile Image</label>
-            <div class="flex flex-col items-center">
-                @if (!string.IsNullOrEmpty(Model.UserImgUrl))
-                {
-                    <img src="@Model.UserImgUrl" alt="Profile Image" class="w-32 h-32 rounded-full object-cover mb-2" />
-                }
-                else
-                {
-                    <p class="text-gray-500">No image available</p>
-                }
-                <input asp-for="UserImgFile" type="file" accept="image/*" class="mt-2" />
-                <span asp-validation-for="UserImgFile" class="text-xs text-red-500"></span>
-            </div>
-        </div>
-
-
+       
         <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+
+            <div class="profile-image-section mb-4">
+                <label for="userImgFile" class="text-lg font-semibold text-[#152852]">Profile Image</label>
+                <div class="flex flex-col items-center">
+                    @if (!string.IsNullOrEmpty(Model.UserImgUrl))
+                    {
+                        <img id="previewImage" src="@Model.UserImgUrl" alt="Profile Image" class="w-32 h-32 rounded-full object-cover mb-2" />
+                    }
+                    else
+                    {
+                        <img id="previewImage" src="#" alt="No Image" class="w-32 h-32 rounded-full object-cover mb-2 hidden" />
+                        <p id="noImageText" class="text-gray-500">No image available</p>
+                    }
+                    <input id="userImgFile" asp-for="UserImgFile" type="file" accept="image/*" class="mt-2" onchange="previewFile()" />
+                    <span asp-validation-for="UserImgFile" class="text-xs text-red-500"></span>
+                </div>
+            </div>
 
             <input asp-for="CurrentEmail" hidden />
 
@@ -80,3 +81,22 @@
     <partial name="_ValidationScriptsPartial" />
   
 } *@
+
+<script>
+    function previewFile() {
+        const fileInput = document.getElementById('userImgFile');
+        const previewImage = document.getElementById('previewImage');
+        const noImageText = document.getElementById('noImageText');
+
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('hidden'); // Show image
+                if (noImageText) noImageText.style.display = 'none'; // Hide "No image available" text
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

@@ -299,7 +299,7 @@ namespace TMS.Controllers.Accounts
 
                 var updates = new Dictionary<string, object>();
 
-                // Handle the image upload to Cloudinary
+                // Update Profile Picture
                 if (model.UserImgFile != null && model.UserImgFile.Length > 0)
                 {
                     var cloudinaryService = new CloudinaryService();
@@ -308,9 +308,12 @@ namespace TMS.Controllers.Accounts
                     // Save the image URL to Firestore
                     updates["UserImg"] = imageUrl;
                     await userDocRef.UpdateAsync(updates);
+
+                    HttpContext.Session.SetString("UserImg", imageUrl);
+
                 }
 
-                // Process Password Update if applicable
+                // Update Password
                 if (!string.IsNullOrEmpty(model.OldPassword) && !string.IsNullOrEmpty(model.NewPassword))
                 {
                     // Authenticate user for password change
@@ -325,7 +328,6 @@ namespace TMS.Controllers.Accounts
 
                     try
                     {
-                        // Update password
                         var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
                         {
                             Uid = authResultPass.User.LocalId,  // Use UID to identify the user
@@ -362,6 +364,7 @@ namespace TMS.Controllers.Accounts
 
                     try
                     {
+                        // Update Email 
                         var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
                         {
                             Uid = authResultEmail.User.LocalId,
