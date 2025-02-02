@@ -2,19 +2,42 @@
 @await Html.PartialAsync("Navbar")
 
 <div class="flex h-full w-full flex-row">
-    <!--The Side Container-->
+    <!-- Side Container -->
     <div class="h-full w-3/12 p-8">
         @await Html.PartialAsync("Sidebar")
     </div>
 
-    <!--The Main Container-->
+    <!-- Main Container -->
     <div class="flex h-full w-9/12 flex-col gap-4 p-8">
         <div class="border-b-2 border-b-red-500 py-2">
             <label class="w-full text-xl font-semibold text-[#152852]">Edit Profile</label>
         </div>
+
+        <!-- Profile Image Section (outside the form) -->
+        <div class="profile-image-section mb-4">
+            <label for="userImgFile" class="text-lg font-semibold text-[#152852]">Profile Image</label>
+            <div class="flex flex-col items-center">
+                @if (!string.IsNullOrEmpty(Model.UserImgUrl))
+                {
+                    <img src="@Model.UserImgUrl" alt="Profile Image" class="w-32 h-32 rounded-full object-cover mb-2" />
+                }
+                else
+                {
+                    <p class="text-gray-500">No image available</p>
+                }
+                <input asp-for="UserImgFile" type="file" accept="image/*" class="mt-2" />
+                <span asp-validation-for="UserImgFile" class="text-xs text-red-500"></span>
+            </div>
+        </div>
+
+
         <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+
+            <input asp-for="CurrentEmail" hidden />
+
             <div>
-                <input asp-for="CurrentEmail" hidden/>
+                <label for="Email">New Email</label>
+                <input asp-for="Email" />
             </div>
 
             <div>
@@ -22,13 +45,38 @@
                 <input asp-for="CurrentPassword" type="password" />
             </div>
 
+            <hr />
+
+            <h3>Change Password</h3>
+
             <div>
-                <label for="Email">New Email</label>
-                <input asp-for="Email" />
+                <label for="OldPassword">Old Password</label>
+                <input asp-for="OldPassword" type="password" />
+                <span asp-validation-for="OldPassword" class="absolute end-0 right-6 text-xs text-red-500"></span>
+
+            </div>
+
+            <div>
+                <label for="NewPassword">New Password</label>
+                <input asp-for="NewPassword" type="password" />
+                <span asp-validation-for="NewPassword" class="absolute end-0 right-6 text-xs text-red-500"></span>
+
+            </div>
+
+            <div>
+                <label for="ConfirmPassword">Confirm New Password</label>
+                <input asp-for="ConfirmPassword" type="password" />
+                <span asp-validation-for="ConfirmPassword" class="absolute end-0 right-6 text-xs text-red-500"></span>
+
             </div>
 
             <button type="submit">Update</button>
         </form>
 
     </div>
- </div>
+</div>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+  
+} *@

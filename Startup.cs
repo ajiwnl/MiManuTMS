@@ -2,6 +2,8 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace TMS
 {
@@ -45,5 +47,43 @@ namespace TMS
         {
             app.UseSession();
         }
+    }
+}
+
+public class CloudinaryService
+{
+    private readonly Cloudinary _cloudinary;
+
+    public CloudinaryService()
+    {
+        var account = new Account(
+            "dip5gm9sj",
+            "942788152523517",
+            "OFNSf-cxYC3zwb-uAozj7XwxXHU"
+        );
+        _cloudinary = new Cloudinary(account);
+    }
+
+    public async Task<string> UploadImageAsync(IFormFile file)
+    {
+        // Create the transformation to resize and crop the image
+        var transformation = new Transformation()
+            .Width(500)    // Set the width to 500px
+            .Height(500)   // Set the height to 500px
+            .Crop("fill"); // Crop the image to fill the set width and height
+
+        // Prepare the upload parameters with transformation
+        var uploadParams = new ImageUploadParams()
+        {
+            File = new FileDescription(file.FileName, file.OpenReadStream()),
+            Folder = "profile_images", // Optional: Cloudinary folder to organize images
+            Transformation = transformation // Apply transformation
+        };
+
+        // Upload the image and get the result
+        var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+        // Return the secure URL of the uploaded image
+        return uploadResult?.SecureUrl.ToString();
     }
 }

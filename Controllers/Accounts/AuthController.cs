@@ -3,6 +3,8 @@ using Firebase.Auth;
 using Google.Cloud.Firestore;
 using TMS.Models;
 using TMS.ViewModels;
+using System.ComponentModel.DataAnnotations;
+using Firebase.Storage;
 
 namespace TMS.Controllers.Accounts
 {
@@ -265,11 +267,15 @@ namespace TMS.Controllers.Accounts
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileViewModel model)
         {
-/*            if (!ModelState.IsValid)
+            foreach (var key in ModelState.Keys)
             {
-                _logger.LogWarning("Form submission invalid. ModelState is not valid.");
-                return View(model); // Stay on the form page to fix errors
-            }*/
+                var state = ModelState[key];
+                if (state.Errors.Count > 0)
+                {
+                    _logger.LogWarning($"Model state error for {key}: {string.Join(", ", state.Errors.Select(e => e.ErrorMessage))}");
+                }
+            }
+
 
             try
             {
@@ -293,75 +299,108 @@ namespace TMS.Controllers.Accounts
 
                 var updates = new Dictionary<string, object>();
 
-                // Ensure user is authenticated with their current email and password
-                _logger.LogInformation("Authenticating user with current email: " + model.CurrentEmail);
-                var authResult = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.CurrentPassword);
-                if (authResult == null)
+                // Handle the image upload to Cloudinary
+                if (model.UserImgFile != null && model.UserImgFile.Length > 0)
                 {
-                    _logger.LogError("Authentication failed for user: " + model.CurrentEmail);
-                    TempData["ErrorMsg"] = "Authentication failed. Please check your current email and password.";
-                    return View(model);
-                }
-                var token = authResult.FirebaseToken;
+                    var cloudinaryService = new CloudinaryService();
+                    var imageUrl = await cloudinaryService.UploadImageAsync(model.UserImgFile);
 
-                // Update email logic
+                    // Save the image URL to Firestore
+                    updates["UserImg"] = imageUrl;
+                    await userDocRef.UpdateAsync(updates);
+                }
+
+                // Process Password Update if applicable
+                if (!string.IsNullOrEmpty(model.OldPassword) && !string.IsNullOrEmpty(model.NewPassword))
+                {
+                    // Authenticate user for password change
+                    var authResultPass = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.OldPassword);
+                    if (authResultPass == null)
+                    {
+                        _logger.LogError("Authentication failed for user: " + model.CurrentEmail);
+                        TempData["ErrorMsg"] = "Authentication failed. Please check your current password.";
+                        ModelState.AddModelError(nameof(model.OldPassword), "Authentication failed. Please check your old password.");
+                        return View(model);
+                    }
+
+                    try
+                    {
+                        // Update password
+                        var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
+                        {
+                            Uid = authResultPass.User.LocalId,  // Use UID to identify the user
+                            Password = model.NewPassword        // Set the new password
+                        };
+
+                        // Update the user's password
+                        await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
+
+                        TempData["SuccessMsg"] = "Password updated successfully.";
+                        _logger.LogInformation($"Password updated successfully for user: {model.CurrentEmail}");
+                        return RedirectToAction("Login");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error changing password: {ex.Message}");
+                        TempData["ErrorMsg"] = "An error occurred while updating the password.";
+                        return View(model);
+                    }
+                }
+
+                // Update Email
                 if (!string.IsNullOrEmpty(model.Email) && model.Email != model.CurrentEmail)
                 {
-                    _logger.LogInformation("Updating email from: " + model.CurrentEmail + " to: " + model.Email);
+                    // Authenticate user before changing email
+                    var authResultEmail = await _firebaseauth.SignInWithEmailAndPasswordAsync(model.CurrentEmail, model.CurrentPassword);
+                    if (authResultEmail == null)
+                    {
+                        _logger.LogError("Authentication failed for user: " + model.CurrentEmail);
+                        TempData["ErrorMsg"] = "Authentication failed. Please check your current password.";
+                        ModelState.AddModelError(nameof(model.CurrentPassword), "Authentication failed. Please check your current password.");
+                        return View(model);
+                    }
+
                     try
                     {
                         var userRecordArgs = new FirebaseAdmin.Auth.UserRecordArgs
                         {
-                            Uid = authResult.User.LocalId,
+                            Uid = authResultEmail.User.LocalId,
                             Email = model.Email
                         };
 
-                        // Update email in Firebase Authentication
                         await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecordArgs);
+                        await _firebaseauth.SendEmailVerificationAsync(authResultEmail.FirebaseToken);
 
-                        // Send email verification
-                        await _firebaseauth.SendEmailVerificationAsync(token);
-
-                        // Update email in Firestore
                         updates["Email"] = model.Email;
-                        await userDocRef.UpdateAsync(updates);  // Update the Firestore Users collection
-                        _logger.LogInformation("Email updated successfully in Firestore. Verification email sent to: " + model.Email);
+                        await userDocRef.UpdateAsync(updates);
 
                         TempData["SuccessMsg"] = "Email updated successfully. Please verify your new email address.";
                         HttpContext.Session.Clear();
                         HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-                        return RedirectToAction("Login"); // Redirect after email update
+                        return RedirectToAction("Login");
                     }
                     catch (Exception ex)
                     {
                         _logger.LogError($"Error updating email: {ex.Message}");
                         TempData["ErrorMsg"] = "An error occurred while updating the email.";
-                        return View(model);  // Stay on the form page to fix errors
+                        return View(model);
                     }
                 }
 
-                // Apply other profile updates if necessary
-                if (updates.Count > 0)
-                {
-                    await userDocRef.UpdateAsync(updates);
-                    _logger.LogInformation("Profile updates saved successfully.");
-                }
-
-                TempData["SuccessMsg"] = "Profile updated successfully.";
                 return RedirectToAction("Profile");
-
             }
+
             catch (FirebaseAuthException ex)
             {
                 _logger.LogError($"Firebase Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An error occurred: " + ex.Message;
-                return View(model);  // Stay on the form page to fix errors
+                return View(model);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"General Exception: {ex.Message}");
                 TempData["ErrorMsg"] = "An unexpected error occurred. Please try again.";
-                return View(model);  // Stay on the form page to fix errors
+                return View(model);
             }
         }
 
