@@ -66,17 +66,15 @@ public class CloudinaryService
 
     public async Task<string> UploadImageAsync(IFormFile file)
     {
-        // Create the transformation to resize and crop the image
         var transformation = new Transformation()
             .Width(500)    // Set the width to 500px
             .Height(500)   // Set the height to 500px
-            .Crop("fill"); // Crop the image to fill the set width and height
-
+            .Crop("fill"); 
         // Prepare the upload parameters with transformation
         var uploadParams = new ImageUploadParams()
         {
             File = new FileDescription(file.FileName, file.OpenReadStream()),
-            Folder = "profile_images", // Optional: Cloudinary folder to organize images
+            Folder = "profile_images",
             Transformation = transformation // Apply transformation
         };
 
